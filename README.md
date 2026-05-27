@@ -1,4 +1,4 @@
-Aquí tienes una propuesta para el archivo README.md, con una estructura limpia, profesional y lista para producción. He adaptado el tono para que refleje la identidad de tu proyecto.
+
 
 # templates-rtk-catalogo
 Servicios para Routicket
