@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pizzería Online</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --red:#d62828;
+    --yellow:#fcbf49;
+    --black:#111;
+    --white:#fff;
+    --gray:#f5f5f5;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:var(--white);
+    color:var(--black);
+    overflow-x:hidden;
+}
+
+img{
+    width:100%;
+    display:block;
+}
+
+button{
+    border:none;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.container{
+    width:92%;
+    max-width:1300px;
+    margin:auto;
+}
+
+/* HEADER */
+
+header{
+    background:var(--black);
+    padding:16px 0;
+    position:sticky;
+    top:0;
+    z-index:1000;
+    box-shadow:0 4px 15px rgba(0,0,0,.2);
+}
+
+.nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    color:var(--white);
+}
+
+.logo img{
+    width:65px;
+    height:65px;
+    border-radius:50%;
+    object-fit:cover;
+    border:3px solid var(--yellow);
+}
+
+.logo h1{
+    font-size:1.3rem;
+    font-weight:700;
+}
+
+.logo p{
+    color:#ccc;
+    font-size:.9rem;
+}
+
+.cart-btn{
+    background:var(--red);
+    color:white;
+    padding:12px 22px;
+    border-radius:999px;
+    font-weight:600;
+    font-size:.95rem;
+}
+
+.cart-btn:hover{
+    background:#b71c1c;
+}
+
+/* HERO */
+
+.hero{
+    min-height:75vh;
+    background:
+    linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.65)),
+    url('https://images.unsplash.com/photo-1513104890138-7c749659a591') center/cover;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:white;
+    padding:40px 20px;
+}
+
+.hero-content{
+    max-width:750px;
+}
+
+.hero h2{
+    font-size:3.5rem;
+    line-height:1.1;
+    margin-bottom:20px;
+}
+
+.hero p{
+    font-size:1.1rem;
+    color:#eee;
+    margin-bottom:30px;
+}
+
+.hero-btn{
+    display:inline-block;
+    background:var(--yellow);
+    color:var(--black);
+    padding:15px 30px;
+    border-radius:999px;
+    text-decoration:none;
+    font-weight:700;
+}
+
+.hero-btn:hover{
+    transform:translateY(-2px);
+}
+
+/* CATEGORÍAS */
+
+.categories{
+    padding:35px 0 10px;
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.category-btn{
+    background:white;
+    border:2px solid #ddd;
+    padding:12px 24px;
+    border-radius:999px;
+    font-weight:600;
+}
+
+.category-btn.active,
+.category-btn:hover{
+    background:var(--red);
+    border-color:var(--red);
+    color:white;
+}
+
+/* TITULO */
+
+.section-title{
+    text-align:center;
+    margin:50px 0 35px;
+}
+
+.section-title h2{
+    font-size:2.4rem;
+    margin-bottom:10px;
+}
+
+.section-title p{
+    color:#666;
+}
+
+/* PRODUCTOS */
+
+.products{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:28px;
+    padding-bottom:60px;
+}
+
+.card{
+    background:white;
+    border-radius:28px;
+    overflow:hidden;
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.card img{
+    height:240px;
+    object-fit:cover;
+}
+
+.card-content{
+    padding:22px;
+}
+
+.card h3{
+    font-size:1.35rem;
+    margin-bottom:10px;
+}
+
+.card p{
+    color:#666;
+    font-size:.95rem;
+    line-height:1.6;
+    margin-bottom:18px;
+}
+
+.option{
+    margin-bottom:15px;
+}
+
+.option label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:600;
+    font-size:.95rem;
+}
+
+.option select{
+    width:100%;
+    padding:12px;
+    border-radius:16px;
+    border:1px solid #ddd;
+    outline:none;
+}
+
+.checkbox{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:18px;
+    font-size:.95rem;
+}
+
+.price-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+    margin-top:10px;
+}
+
+.price{
+    font-size:1.7rem;
+    font-weight:700;
+    color:var(--red);
+}
+
+.add-btn{
+    background:var(--yellow);
+    color:var(--black);
+    padding:13px 22px;
+    border-radius:999px;
+    font-weight:700;
+}
+
+.add-btn:hover{
+    background:#f4b000;
+}
+
+/* CARRITO */
+
+.cart{
+    position:fixed;
+    top:0;
+    right:-420px;
+    width:380px;
+    max-width:100%;
+    height:100vh;
+    background:white;
+    z-index:2000;
+    box-shadow:-10px 0 35px rgba(0,0,0,.18);
+    display:flex;
+    flex-direction:column;
+    transition:.4s;
+}
+
+.cart.active{
+    right:0;
+}
+
+.cart-header{
+    background:var(--black);
+    color:white;
+    padding:22px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.cart-header button{
+    background:none;
+    color:white;
+    font-size:1.5rem;
+}
+
+.cart-items{
+    flex:1;
+    overflow:auto;
+    padding:20px;
+    background:#fafafa;
+}
+
+.cart-item{
+    background:white;
+    border-radius:18px;
+    padding:15px;
+    margin-bottom:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,.05);
+}
+
+.cart-footer{
+    padding:22px;
+    border-top:1px solid #eee;
+}
+
+.total{
+    display:flex;
+    justify-content:space-between;
+    font-size:1.3rem;
+    font-weight:700;
+    margin-bottom:18px;
+}
+
+.checkout{
+    width:100%;
+    background:var(--red);
+    color:white;
+    padding:15px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:1rem;
+}
+
+.checkout:hover{
+    background:#b71c1c;
+}
+
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.5);
+    opacity:0;
+    visibility:hidden;
+    transition:.3s;
+    z-index:1500;
+}
+
+.overlay.active{
+    opacity:1;
+    visibility:visible;
+}
+
+/* FOOTER */
+
+footer{
+    background:var(--black);
+    color:white;
+    text-align:center;
+    padding:25px 20px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+    .hero h2{
+        font-size:2.2rem;
+    }
+
+    .nav{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .cart-btn{
+        width:100%;
+    }
+
+    .products{
+        grid-template-columns:1fr;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<header>
+    <div class="container nav">
+
+        <div class="logo">
+            <img id="logo" src="">
+            <div>
+                <h1 id="storeName">Pizzería Online</h1>
+                <p id="storeDesc">Pizza artesanal y delivery</p>
+            </div>
+        </div>
+
+        <button class="cart-btn" id="openCart">
+            🛒 Carrito (<span id="count">0</span>)
+        </button>
+
+    </div>
+</header>
+
+<section class="hero">
+    <div class="hero-content">
+        <h2>Las mejores pizzas recién horneadas 🍕</h2>
+        <p>
+            Sabor artesanal, ingredientes frescos y entrega rápida hasta tu puerta.
+        </p>
+
+        <a href="#menu" class="hero-btn">
+            Ver menú
+        </a>
+    </div>
+</section>
+
+<section class="container categories">
+    <button class="category-btn active" data-category="all">Todo</button>
+    <button class="category-btn" data-category="Pizzas Clásicas">Clásicas</button>
+    <button class="category-btn" data-category="Pizzas Gourmet">Gourmet</button>
+</section>
+
+<section class="container" id="menu">
+
+    <div class="section-title">
+        <h2>Nuestro Menú</h2>
+        <p>Personaliza tu pizza favorita</p>
+    </div>
+
+    <div class="products" id="products"></div>
+
+</section>
+
+<aside class="cart" id="cart">
+
+    <div class="cart-header">
+        <h2>Tu Pedido</h2>
+        <button id="closeCart">✕</button>
+    </div>
+
+    <div class="cart-items" id="cartItems"></div>
+
+    <div class="cart-footer">
+
+        <div class="total">
+            <span>Total</span>
+            <span id="total">$0 MXN</span>
+        </div>
+
+        <button class="checkout">
+            Finalizar Pedido
+        </button>
+
+    </div>
+
+</aside>
+
+<div class="overlay" id="overlay"></div>
+
+<footer>
+    © 2026 Pizzería Online
+</footer>
+
+<script>
+
+const API = 'https://routicket.com/tienda/get_tienda.php?id_tienda=15510';
+
+const productsEl = document.getElementById('products');
+const cartItems = document.getElementById('cartItems');
+const totalEl = document.getElementById('total');
+const countEl = document.getElementById('count');
+
+const cart = document.getElementById('cart');
+const overlay = document.getElementById('overlay');
+
+let products = [];
+let carrito = [];
+
+// CARGAR DATOS
+
+async function loadStore(){
+
+    const res = await fetch(API);
+    const data = await res.json();
+
+    const tienda = data.data;
+
+    document.getElementById('storeName').textContent = tienda.titulo;
+    document.getElementById('storeDesc').textContent = tienda.descripcion;
+    document.getElementById('logo').src = tienda.foto;
+
+    products = tienda.productos;
+
+    renderProducts(products);
+}
+
+// PRODUCTOS
+
+function renderProducts(items){
+
+    productsEl.innerHTML = '';
+
+    items.forEach(item=>{
+
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        card.innerHTML = `
+            <img src="${item.image}" alt="${item.name}">
+
+            <div class="card-content">
+
+                <h3>${item.name}</h3>
+
+                <p>
+                    ${item.description || 'Pizza artesanal preparada al momento.'}
+                </p>
+
+                <div class="option">
+                    <label>Tamaño</label>
+
+                    <select class="size">
+                        <option value="0">Individual</option>
+                        <option value="40">Mediana (+$40)</option>
+                        <option value="80">Familiar (+$80)</option>
+                    </select>
+                </div>
+
+                <label class="checkbox">
+                    <input type="checkbox" class="border">
+                    Orilla rellena (+$35)
+                </label>
+
+                <div class="price-row">
+
+                    <div class="price">
+                        $<span>${item.price}</span>
+                    </div>
+
+                    <button class="add-btn">
+                        Agregar
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+
+        const size = card.querySelector('.size');
+        const border = card.querySelector('.border');
+        const price = card.querySelector('.price span');
+        const addBtn = card.querySelector('.add-btn');
+
+        function updatePrice(){
+
+            let total = Number(item.price);
+
+            total += Number(size.value);
+
+            if(border.checked) total += 35;
+
+            price.textContent = total;
+
+            return total;
+        }
+
+        size.addEventListener('change', updatePrice);
+        border.addEventListener('change', updatePrice);
+
+        addBtn.addEventListener('click', ()=>{
+
+            carrito.push({
+                name:item.name,
+                price:updatePrice()
+            });
+
+            updateCart();
+            openCart();
+        });
+
+        productsEl.appendChild(card);
+    });
+}
+
+// CARRITO
+
+function updateCart(){
+
+    cartItems.innerHTML = '';
+
+    let total = 0;
+
+    carrito.forEach(item=>{
+
+        total += item.price;
+
+        cartItems.innerHTML += `
+            <div class="cart-item">
+                <strong>${item.name}</strong>
+                <p>$${item.price} MXN</p>
+            </div>
+        `;
+    });
+
+    totalEl.textContent = '$' + total + ' MXN';
+    countEl.textContent = carrito.length;
+}
+
+// FILTROS
+
+document.querySelectorAll('.category-btn').forEach(btn=>{
+
+    btn.addEventListener('click', ()=>{
+
+        document.querySelectorAll('.category-btn')
+        .forEach(b=>b.classList.remove('active'));
+
+        btn.classList.add('active');
+
+        const category = btn.dataset.category;
+
+        if(category === 'all'){
+
+            renderProducts(products);
+
+        }else{
+
+            renderProducts(
+                products.filter(p => p.category_name === category)
+            );
+        }
+    });
+});
+
+// CARRITO
+
+function openCart(){
+
+    cart.classList.add('active');
+    overlay.classList.add('active');
+}
+
+function closeCart(){
+
+    cart.classList.remove('active');
+    overlay.classList.remove('active');
+}
+
+document.getElementById('openCart')
+.addEventListener('click', openCart);
+
+document.getElementById('closeCart')
+.addEventListener('click', closeCart);
+
+overlay.addEventListener('click', closeCart);
+
+loadStore();
+
+</script>
+
+</body>
+</html>
