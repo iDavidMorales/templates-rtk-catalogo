@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beauty Glow</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --pink:#f45ba5;
+    --pink2:#ff8fc7;
+    --purple:#a855f7;
+    --dark:#1d1d1d;
+    --light:#fff9fc;
+    --white:#fff;
+    --shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:linear-gradient(to bottom,#fff,#fff7fb);
+    color:var(--dark);
+    overflow-x:hidden;
+}
+
+.container{
+    width:92%;
+    max-width:1350px;
+    margin:auto;
+}
+
+img{
+    width:100%;
+    display:block;
+}
+
+button{
+    border:none;
+    cursor:pointer;
+    transition:.3s;
+}
+
+a{
+    text-decoration:none;
+}
+
+/* TOPBAR */
+
+.topbar{
+    background:linear-gradient(90deg,var(--pink2),#ffd6ea);
+    padding:10px 0;
+    font-size:.9rem;
+    color:#7b2453;
+}
+
+.topbar-content{
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+/* HEADER */
+
+header{
+    background:rgba(255,255,255,.95);
+    backdrop-filter:blur(12px);
+    position:sticky;
+    top:0;
+    z-index:1000;
+    box-shadow:0 4px 20px rgba(0,0,0,.05);
+}
+
+.nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 0;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.logo img{
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    object-fit:cover;
+    border:3px solid var(--pink2);
+}
+
+.logo h1{
+    font-size:2rem;
+    color:#4b1840;
+}
+
+.logo p{
+    color:#c84d8b;
+    font-size:.95rem;
+}
+
+.menu{
+    display:flex;
+    gap:35px;
+}
+
+.menu a{
+    color:#444;
+    font-weight:600;
+    position:relative;
+}
+
+.menu a:hover,
+.menu a.active{
+    color:var(--pink);
+}
+
+.menu a.active::after{
+    content:'';
+    position:absolute;
+    bottom:-8px;
+    left:0;
+    width:100%;
+    height:3px;
+    background:var(--pink);
+    border-radius:20px;
+}
+
+.cart-btn{
+    background:linear-gradient(45deg,var(--pink),var(--pink2));
+    color:white;
+    padding:14px 24px;
+    border-radius:999px;
+    font-weight:600;
+    box-shadow:0 8px 20px rgba(244,91,165,.3);
+}
+
+/* HERO */
+
+.hero{
+    margin-top:25px;
+}
+
+.slider{
+    position:relative;
+    height:520px;
+    border-radius:35px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+}
+
+.slide{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    transition:1s;
+}
+
+.slide.active{
+    opacity:1;
+}
+
+.slide img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.overlay{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(90deg,rgba(255,255,255,.85),rgba(255,255,255,.2));
+}
+
+.hero-content{
+    position:absolute;
+    top:50%;
+    left:80px;
+    transform:translateY(-50%);
+    z-index:5;
+    max-width:500px;
+}
+
+.hero-content h2{
+    font-size:4rem;
+    line-height:1;
+    margin-bottom:20px;
+    color:#2e0f29;
+}
+
+.hero-content span{
+    color:var(--pink);
+}
+
+.hero-content p{
+    color:#555;
+    font-size:1.1rem;
+    margin-bottom:30px;
+}
+
+.hero-btn{
+    display:inline-block;
+    background:linear-gradient(45deg,var(--pink),var(--purple));
+    color:white;
+    padding:16px 34px;
+    border-radius:999px;
+    font-weight:700;
+    box-shadow:0 10px 25px rgba(244,91,165,.3);
+}
+
+/* CATEGORIAS */
+
+.categories{
+    display:flex;
+    justify-content:center;
+    gap:25px;
+    flex-wrap:wrap;
+    margin:50px 0;
+}
+
+.category{
+    text-align:center;
+}
+
+.category button{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    background:white;
+    box-shadow:var(--shadow);
+    font-size:2rem;
+    margin-bottom:10px;
+}
+
+.category.active button,
+.category button:hover{
+    background:linear-gradient(45deg,var(--pink),var(--purple));
+    color:white;
+}
+
+.category p{
+    font-weight:600;
+    color:#555;
+}
+
+/* TITULO */
+
+.section-title{
+    text-align:center;
+    margin-bottom:50px;
+}
+
+.section-title h2{
+    font-size:3rem;
+    color:#2e0f29;
+}
+
+.section-title span{
+    color:var(--pink);
+}
+
+.section-title p{
+    color:#777;
+    margin-top:10px;
+}
+
+/* GRID */
+
+.shop{
+    display:grid;
+    grid-template-columns:1fr 320px;
+    gap:30px;
+    align-items:start;
+}
+
+.products{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:25px;
+}
+
+/* CARD */
+
+.card{
+    background:white;
+    border-radius:28px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+    transition:.3s;
+    border:1px solid #ffe3f1;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+}
+
+.card-image{
+    height:240px;
+    background:#fff5fa;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.card-image img{
+    height:100%;
+    object-fit:contain;
+}
+
+.card-content{
+    padding:20px;
+}
+
+.card h3{
+    font-size:1.1rem;
+    margin-bottom:8px;
+}
+
+.card p{
+    color:#777;
+    font-size:.9rem;
+    margin-bottom:15px;
+}
+
+.price{
+    font-size:1.5rem;
+    font-weight:700;
+    color:var(--pink);
+    margin-bottom:15px;
+}
+
+.add-btn{
+    width:100%;
+    background:linear-gradient(45deg,var(--pink),var(--purple));
+    color:white;
+    padding:14px;
+    border-radius:999px;
+    font-weight:700;
+}
+
+/* CARRITO */
+
+.cart{
+    background:#fff4fa;
+    border-radius:30px;
+    padding:30px;
+    position:sticky;
+    top:120px;
+    box-shadow:var(--shadow);
+}
+
+.cart h3{
+    font-size:2rem;
+    margin-bottom:30px;
+    color:#38152e;
+}
+
+.cart-items{
+    min-height:220px;
+}
+
+.empty{
+    color:#777;
+    text-align:center;
+    padding:40px 0;
+}
+
+.cart-item{
+    background:white;
+    border-radius:18px;
+    padding:15px;
+    margin-bottom:15px;
+}
+
+.cart-item strong{
+    display:block;
+    margin-bottom:6px;
+}
+
+.total{
+    display:flex;
+    justify-content:space-between;
+    margin:25px 0;
+    font-size:1.2rem;
+    font-weight:700;
+}
+
+.checkout{
+    width:100%;
+    background:linear-gradient(45deg,var(--pink),var(--purple));
+    color:white;
+    padding:16px;
+    border-radius:999px;
+    font-size:1rem;
+    font-weight:700;
+}
+
+/* FOOTER */
+
+footer{
+    margin-top:80px;
+    background:linear-gradient(90deg,#ffe3f1,#f7d9ff);
+    padding:60px 0 30px;
+    border-radius:50px 50px 0 0;
+}
+
+.footer-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:40px;
+}
+
+.footer-logo{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.footer-logo img{
+    width:65px;
+    height:65px;
+    border-radius:50%;
+}
+
+.footer h4{
+    margin-bottom:15px;
+    color:#3b1730;
+}
+
+.footer p,
+.footer li{
+    color:#5f5f5f;
+    margin-bottom:10px;
+    list-style:none;
+}
+
+.newsletter{
+    display:flex;
+    background:white;
+    border-radius:999px;
+    overflow:hidden;
+    margin-top:15px;
+}
+
+.newsletter input{
+    flex:1;
+    border:none;
+    padding:14px;
+    outline:none;
+}
+
+.newsletter button{
+    width:60px;
+    background:linear-gradient(45deg,var(--pink),var(--purple));
+    color:white;
+}
+
+.copy{
+    text-align:center;
+    margin-top:40px;
+    color:#666;
+    font-size:.9rem;
+}
+
+@media(max-width:980px){
+
+    .shop{
+        grid-template-columns:1fr;
+    }
+
+    .cart{
+        position:relative;
+        top:0;
+    }
+
+    .menu{
+        display:none;
+    }
+
+    .hero-content{
+        left:40px;
+    }
+
+    .hero-content h2{
+        font-size:2.7rem;
+    }
+}
+
+@media(max-width:768px){
+
+    .hero-content{
+        left:25px;
+        right:25px;
+    }
+
+    .hero-content h2{
+        font-size:2.2rem;
+    }
+
+    .slider{
+        height:420px;
+    }
+
+    .products{
+        grid-template-columns:1fr;
+    }
+
+    .nav{
+        flex-direction:column;
+        gap:20px;
+    }
+
+    .cart-btn{
+        width:100%;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="container topbar-content">
+        <div>🚚 Envíos rápidos a todo México</div>
+        <div>💖 Productos 100% originales</div>
+    </div>
+</div>
+
+<header>
+    <div class="container nav">
+
+        <div class="logo">
+            <img id="logo" src="https://i.imgur.com/Ol98FF8.png">
+            <div>
+                <h1>Beauty Glow</h1>
+                <p>Tu belleza, tu estilo</p>
+            </div>
+        </div>
+
+        <nav class="menu">
+            <a href="#" class="active">Inicio</a>
+            <a href="#">Tienda</a>
+            <a href="#">Novedades</a>
+            <a href="#">Ofertas</a>
+            <a href="#">Contacto</a>
+        </nav>
+
+        <button class="cart-btn">
+            🛍 Carrito (<span id="count">0</span>)
+        </button>
+
+    </div>
+</header>
+
+<section class="hero container">
+
+    <div class="slider">
+
+        <div class="slide active">
+            <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1400">
+        </div>
+
+        <div class="slide">
+            <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?q=80&w=1400">
+        </div>
+
+        <div class="slide">
+            <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=1400">
+        </div>
+
+        <div class="overlay"></div>
+
+        <div class="hero-content">
+            <h2>Realza tu belleza <span>cada día ✨</span></h2>
+            <p>
+                Descubre maquillaje premium, skincare y accesorios para resaltar tu estilo.
+            </p>
+
+            <a href="#products" class="hero-btn">
+                Comprar Ahora
+            </a>
+        </div>
+
+    </div>
+
+</section>
+
+<section class="categories container">
+
+    <div class="category active">
+        <button>💄</button>
+        <p>Labios</p>
+    </div>
+
+    <div class="category">
+        <button>👁</button>
+        <p>Ojos</p>
+    </div>
+
+    <div class="category">
+        <button>✨</button>
+        <p>Rostro</p>
+    </div>
+
+    <div class="category">
+        <button>🧴</button>
+        <p>Skincare</p>
+    </div>
+
+    <div class="category">
+        <button>🎁</button>
+        <p>Sets</p>
+    </div>
+
+</section>
+
+<section class="container">
+
+    <div class="section-title">
+        <h2>Nuestros <span>Productos</span></h2>
+        <p>Elige tus favoritos y luce increíble siempre.</p>
+    </div>
+
+    <div class="shop">
+
+        <div class="products" id="products"></div>
+
+        <aside class="cart">
+
+            <h3>Tu Carrito</h3>
+
+            <div class="cart-items" id="cartItems">
+                <div class="empty">
+                    Tu carrito está vacío
+                </div>
+            </div>
+
+            <div class="total">
+                <span>Total</span>
+                <span id="total">$0 MXN</span>
+            </div>
+
+            <button class="checkout">
+                Finalizar Compra
+            </button>
+
+        </aside>
+
+    </div>
+
+</section>
+
+<footer class="footer">
+
+    <div class="container footer-grid">
+
+        <div>
+            <div class="footer-logo">
+                <img src="https://i.imgur.com/Ol98FF8.png">
+                <div>
+                    <h2>Beauty Glow</h2>
+                    <p>Tu belleza, tu estilo</p>
+                </div>
+            </div>
+
+            <p>
+                Descubre lo mejor en maquillaje y skincare premium.
+            </p>
+        </div>
+
+        <div>
+            <h4>Categorías</h4>
+            <ul>
+                <li>Labios</li>
+                <li>Ojos</li>
+                <li>Rostro</li>
+                <li>Skincare</li>
+            </ul>
+        </div>
+
+        <div>
+            <h4>Información</h4>
+            <ul>
+                <li>Nosotros</li>
+                <li>Envíos</li>
+                <li>Pagos</li>
+                <li>Contacto</li>
+            </ul>
+        </div>
+
+        <div>
+            <h4>Newsletter</h4>
+            <p>Recibe ofertas y novedades exclusivas.</p>
+
+            <div class="newsletter">
+                <input type="email" placeholder="Tu correo">
+                <button>➜</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="copy">
+        © 2026 Beauty Glow - Todos los derechos reservados
+    </div>
+
+</footer>
+
+<script>
+
+const products = [
+    {
+        name:'Labial Matte Beauty',
+        price:149,
+        image:'https://i.imgur.com/SC4M0hM.png',
+        desc:'Larga duración y acabado mate.'
+    },
+    {
+        name:'Paleta Glow',
+        price:299,
+        image:'https://i.imgur.com/iK7mV4b.png',
+        desc:'Tonos vibrantes y elegantes.'
+    },
+    {
+        name:'Base Perfect Skin',
+        price:199,
+        image:'https://i.imgur.com/xs4Ra0p.png',
+        desc:'Cobertura natural y ligera.'
+    },
+    {
+        name:'Máscara Volumen',
+        price:129,
+        image:'https://i.imgur.com/M2P8b2Q.png',
+        desc:'Pestañas intensas y definidas.'
+    },
+    {
+        name:'Set Brochas Pro',
+        price:349,
+        image:'https://i.imgur.com/eR7d4Ff.png',
+        desc:'Brochas suaves profesionales.'
+    },
+    {
+        name:'Gloss Hidratante',
+        price:99,
+        image:'https://i.imgur.com/r8q4R1U.png',
+        desc:'Brillo y cuidado para labios.'
+    }
+];
+
+const productsEl = document.getElementById('products');
+const cartItems = document.getElementById('cartItems');
+const totalEl = document.getElementById('total');
+const countEl = document.getElementById('count');
+
+let cart = [];
+
+function renderProducts(){
+
+    products.forEach(item=>{
+
+        productsEl.innerHTML += `
+            <div class="card">
+
+                <div class="card-image">
+                    <img src="${item.image}">
+                </div>
+
+                <div class="card-content">
+
+                    <h3>${item.name}</h3>
+
+                    <p>${item.desc}</p>
+
+                    <div class="price">
+                        $${item.price} MXN
+                    </div>
+
+                    <button class="add-btn"
+                        onclick='addToCart(${JSON.stringify(item)})'>
+                        Agregar
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+    });
+}
+
+function addToCart(item){
+
+    cart.push(item);
+
+    updateCart();
+}
+
+function updateCart(){
+
+    cartItems.innerHTML = '';
+
+    let total = 0;
+
+    cart.forEach(item=>{
+
+        total += item.price;
+
+        cartItems.innerHTML += `
+            <div class="cart-item">
+                <strong>${item.name}</strong>
+                <p>$${item.price} MXN</p>
+            </div>
+        `;
+    });
+
+    totalEl.textContent = '$'+total+' MXN';
+    countEl.textContent = cart.length;
+
+    if(cart.length === 0){
+
+        cartItems.innerHTML = `
+            <div class="empty">
+                Tu carrito está vacío
+            </div>
+        `;
+    }
+}
+
+renderProducts();
+
+// SLIDER
+
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+
+setInterval(()=>{
+
+    slides[current].classList.remove('active');
+
+    current = (current + 1) % slides.length;
+
+    slides[current].classList.add('active');
+
+},4000);
+
+</script>
+
+</body>
+</html>
