@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pizzería Online</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f8f5f1;
+    color:#222;
+}
+
+header{
+    background:#111;
+    color:#fff;
+    padding:15px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+}
+
+header h1{
+    font-size:20px;
+}
+
+button{
+    border:none;
+    cursor:pointer;
+}
+
+.hero{
+    height:300px;
+    background:url('https://images.unsplash.com/photo-1513104890138-7c749659a591') center/cover;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:white;
+    position:relative;
+}
+
+.hero::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.5);
+}
+
+.hero div{
+    position:relative;
+    z-index:1;
+}
+
+.hero h2{
+    font-size:40px;
+    margin-bottom:10px;
+}
+
+.hero button{
+    background:#e63946;
+    color:white;
+    padding:12px 20px;
+    border-radius:8px;
+    margin-top:15px;
+}
+
+.products{
+    padding:40px 20px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
+
+.card img{
+    width:100%;
+    height:200px;
+    object-fit:cover;
+}
+
+.card-content{
+    padding:15px;
+}
+
+.card h3{
+    margin-bottom:10px;
+}
+
+.card p{
+    color:#666;
+    font-size:14px;
+    margin-bottom:10px;
+}
+
+select,label{
+    width:100%;
+    margin-bottom:10px;
+}
+
+select{
+    padding:10px;
+    border:1px solid #ddd;
+    border-radius:8px;
+}
+
+.price{
+    font-size:22px;
+    color:#e63946;
+    font-weight:bold;
+    margin:10px 0;
+}
+
+.add{
+    width:100%;
+    background:#2a9d8f;
+    color:white;
+    padding:12px;
+    border-radius:10px;
+}
+
+.cart{
+    position:fixed;
+    right:0;
+    top:0;
+    width:300px;
+    height:100%;
+    background:white;
+    box-shadow:-5px 0 20px rgba(0,0,0,.2);
+    padding:20px;
+    overflow:auto;
+}
+
+.cart h2{
+    margin-bottom:20px;
+}
+
+.cart-item{
+    background:#f4f4f4;
+    padding:10px;
+    border-radius:10px;
+    margin-bottom:10px;
+}
+
+.total{
+    margin-top:20px;
+    font-size:20px;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1 id="storeName">Pizzería Online</h1>
+    <button>🛒 <span id="cartCount">0</span></button>
+</header>
+
+<section class="hero">
+    <div>
+        <h2>Pizza recién horneada 🍕</h2>
+        <p>Las mejores pizzas a domicilio</p>
+        <button>Ver menú</button>
+    </div>
+</section>
+
+<section class="products" id="products"></section>
+
+<aside class="cart">
+    <h2>Carrito</h2>
+    <div id="cartItems"></div>
+    <div class="total" id="total">$0 MXN</div>
+</aside>
+
+<script>
+const API = 'https://routicket.com/tienda/get_tienda.php?id_tienda=15510';
+
+const products = document.getElementById('products');
+const cartItems = document.getElementById('cartItems');
+const totalEl = document.getElementById('total');
+const cartCount = document.getElementById('cartCount');
+
+let cart = [];
+
+async function loadStore() {
+
+    const res = await fetch(API);
+    const data = await res.json();
+
+    document.getElementById('storeName').textContent = data.data.titulo;
+
+    renderProducts(data.data.productos);
+}
+
+function renderProducts(items){
+
+    products.innerHTML = '';
+
+    items.forEach(item=>{
+
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        card.innerHTML = `
+            <img src="${item.image}">
+            <div class="card-content">
+                <h3>${item.name}</h3>
+                <p>${item.description || 'Pizza artesanal deliciosa'}</p>
+
+                <select class="size">
+                    <option value="0">Individual</option>
+                    <option value="40">Mediana +$40</option>
+                    <option value="80">Familiar +$80</option>
+                </select>
+
+                <label>
+                    <input type="checkbox" class="border">
+                    Orilla de queso +$35
+                </label>
+
+                <div class="price">$<span>${item.price}</span></div>
+
+                <button class="add">Agregar</button>
+            </div>
+        `;
+
+        const size = card.querySelector('.size');
+        const border = card.querySelector('.border');
+        const price = card.querySelector('.price span');
+        const add = card.querySelector('.add');
+
+        function updatePrice(){
+            let total = Number(item.price);
+            total += Number(size.value);
+            if(border.checked) total += 35;
+            price.textContent = total;
+            return total;
+        }
+
+        size.addEventListener('change', updatePrice);
+        border.addEventListener('change', updatePrice);
+
+        add.addEventListener('click', ()=>{
+
+            const finalPrice = updatePrice();
+
+            cart.push({
+                name:item.name,
+                price:finalPrice
+            });
+
+            updateCart();
+        });
+
+        products.appendChild(card);
+    });
+}
+
+function updateCart(){
+
+    cartItems.innerHTML = '';
+
+    let total = 0;
+
+    cart.forEach(item=>{
+
+        total += item.price;
+
+        cartItems.innerHTML += `
+            <div class="cart-item">
+                ${item.name}<br>
+                <strong>$${item.price}</strong>
+            </div>
+        `;
+    });
+
+    totalEl.textContent = '$' + total + ' MXN';
+    cartCount.textContent = cart.length;
+}
+
+loadStore();
+</script>
+
+</body>
+</html>
