@@ -1,0 +1,91 @@
+quiero hace run menu digital para una tienda en linea  la url para obtener los datos es esta https://routicket.com/tienda/get_tienda.php?id_tienda=15510 y el json de ejmplo es  este {
+
+    "success": true,
+
+    "data": {
+
+        "user_id": 1446,
+
+        "titulo": "Da2 Comida a Domicilio",
+
+        "foto": "https:\/\/i.imgur.com\/EoN5UT9.jpeg",
+
+        "descripcion": "Venta de comida a domicilio",
+
+        "views": 0,
+
+        "maps": "https:\/\/routicket.com\/map",
+
+        "url": "https:\/\/www.routicket.com",
+
+        "tel": "+529841400774",
+
+        "status": "activo",
+
+        "lat": "20.635823",
+
+        "lng": "-87.075791",
+
+        "direccion": "",
+
+        "video": "",
+
+        "color": "FFFFFF",
+
+        "usuario": "0",
+
+        "foto_ticket": "https:\/\/i.imgur.com\/Ol98FF8.png",
+
+        "slider": 0,
+
+        "productos": [
+
+            {
+
+                "id": 95,
+
+                "name": "Mexicana (Mega)",
+
+                "name_en": "",
+
+                "description": "",
+
+                "description_en": "",
+
+                "price": 238,
+
+                "image": "https:\/\/i.imgur.com\/ypWVqoW.jpeg",
+
+                "fallbackImage": "https:\/\/i.imgur.com\/ypWVqoW.jpeg",
+
+                "id_categoria": 6,
+
+                "category_name": "Pizzas Clásicas"
+
+            },
+
+            {
+
+                "id": 75,
+
+                "name": "Pizza Camarones (Grande)",
+
+                "name_en": "",
+
+                "description": "Camarones, cebolla morada, tomates rojos, aderezo de ajo, pimienta, queso",
+
+                "description_en": "",
+
+                "price": 250,
+
+                "image": "https:\/\/i.imgur.com\/YwV9J47.jpeg",
+
+                "fallbackImage": "https:\/\/i.imgur.com\/YwV9J47.jpeg",
+
+                "id_categoria": 5,
+
+                "category_name": "Pizzas Gourmet"
+
+            },
+
+            {
