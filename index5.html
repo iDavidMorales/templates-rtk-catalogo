@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noely Creaciones</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --lila:#b57cff;
+    --lila-dark:#8c52ff;
+    --black:#111111;
+    --white:#ffffff;
+    --gray:#f6f4fb;
+    --text:#555;
+    --border:#ece8f5;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:var(--gray);
+    color:var(--black);
+    overflow-x:hidden;
+}
+
+img{
+    width:100%;
+    display:block;
+}
+
+button{
+    border:none;
+    cursor:pointer;
+    transition:.3s;
+}
+
+a{
+    text-decoration:none;
+}
+
+.container{
+    width:92%;
+    max-width:1400px;
+    margin:auto;
+}
+
+/* TOPBAR */
+
+.topbar{
+    background:var(--black);
+    color:#ddd;
+    padding:10px 0;
+    font-size:.85rem;
+}
+
+.topbar-content{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+/* HEADER */
+
+header{
+    background:rgba(255,255,255,.95);
+    backdrop-filter:blur(10px);
+    position:sticky;
+    top:0;
+    z-index:1000;
+    border-bottom:1px solid var(--border);
+}
+
+.nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 0;
+    gap:20px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.logo img{
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    object-fit:cover;
+    border:3px solid var(--lila);
+}
+
+.logo h1{
+    font-size:1.4rem;
+    color:var(--black);
+}
+
+.logo p{
+    color:var(--text);
+    font-size:.9rem;
+}
+
+.menu{
+    display:flex;
+    gap:28px;
+}
+
+.menu a{
+    color:var(--black);
+    font-weight:500;
+    position:relative;
+}
+
+.menu a:hover{
+    color:var(--lila-dark);
+}
+
+.menu a::after{
+    content:'';
+    position:absolute;
+    left:0;
+    bottom:-8px;
+    width:0;
+    height:2px;
+    background:var(--lila);
+    transition:.3s;
+}
+
+.menu a:hover::after{
+    width:100%;
+}
+
+.cart-btn{
+    background:linear-gradient(135deg,var(--lila),var(--lila-dark));
+    color:white;
+    padding:14px 24px;
+    border-radius:999px;
+    font-weight:600;
+    box-shadow:0 8px 20px rgba(181,124,255,.35);
+}
+
+.cart-btn:hover{
+    transform:translateY(-2px);
+}
+
+/* HERO */
+
+.hero{
+    padding:35px 0;
+}
+
+.hero-slider{
+    position:relative;
+    border-radius:35px;
+    overflow:hidden;
+    min-height:520px;
+    display:flex;
+    align-items:center;
+    padding:70px;
+    background:
+    linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.45)),
+    url('https://i.imgur.com/cVQLPeI.jpeg') center/cover;
+}
+
+.hero-slider::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        90deg,
+        rgba(181,124,255,.45),
+        rgba(0,0,0,.2)
+    );
+}
+
+.hero-content{
+    position:relative;
+    z-index:2;
+    max-width:580px;
+    color:white;
+}
+
+.hero-content span{
+    display:inline-block;
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.2);
+    padding:10px 18px;
+    border-radius:999px;
+    margin-bottom:18px;
+    backdrop-filter:blur(10px);
+    font-size:.9rem;
+}
+
+.hero-content h2{
+    font-size:4rem;
+    line-height:1.05;
+    margin-bottom:18px;
+}
+
+.hero-content p{
+    font-size:1.05rem;
+    color:#eee;
+    line-height:1.7;
+    margin-bottom:30px;
+}
+
+.hero-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:white;
+    color:var(--black);
+    padding:16px 32px;
+    border-radius:999px;
+    font-weight:700;
+}
+
+.hero-btn:hover{
+    transform:translateY(-2px);
+}
+
+/* CATEGORIAS */
+
+.categories{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:18px;
+    margin:45px 0;
+}
+
+.category-btn{
+    width:120px;
+    height:120px;
+    border-radius:30px;
+    background:white;
+    border:1px solid var(--border);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    font-weight:600;
+    color:var(--black);
+    box-shadow:0 8px 25px rgba(0,0,0,.04);
+}
+
+.category-btn:hover,
+.category-btn.active{
+    background:linear-gradient(135deg,var(--lila),var(--lila-dark));
+    color:white;
+    transform:translateY(-4px);
+}
+
+/* TITLE */
+
+.section-title{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.section-title h2{
+    font-size:2.8rem;
+    margin-bottom:10px;
+}
+
+.section-title p{
+    color:var(--text);
+}
+
+/* LAYOUT */
+
+.store-layout{
+    display:grid;
+    grid-template-columns:1fr 340px;
+    gap:30px;
+    align-items:start;
+}
+
+/* PRODUCTS */
+
+.products{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:24px;
+}
+
+.card{
+    background:white;
+    border-radius:30px;
+    overflow:hidden;
+    border:1px solid var(--border);
+    transition:.35s;
+    position:relative;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 15px 40px rgba(0,0,0,.08);
+}
+
+.card-img{
+    background:#faf7ff;
+    padding:25px;
+    height:260px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.card-img img{
+    max-height:100%;
+    object-fit:contain;
+}
+
+.card-content{
+    padding:24px;
+}
+
+.card h3{
+    font-size:1.1rem;
+    margin-bottom:8px;
+}
+
+.card p{
+    color:var(--text);
+    font-size:.92rem;
+    line-height:1.6;
+    min-height:45px;
+}
+
+.price{
+    margin:18px 0;
+    font-size:1.5rem;
+    font-weight:700;
+    color:var(--lila-dark);
+}
+
+.add-btn{
+    width:100%;
+    background:linear-gradient(135deg,var(--lila),var(--lila-dark));
+    color:white;
+    padding:14px;
+    border-radius:999px;
+    font-weight:600;
+}
+
+.add-btn:hover{
+    opacity:.9;
+}
+
+/* CART */
+
+.cart{
+    position:sticky;
+    top:110px;
+    background:white;
+    border-radius:35px;
+    padding:28px;
+    border:1px solid var(--border);
+    box-shadow:0 10px 30px rgba(0,0,0,.04);
+}
+
+.cart h2{
+    margin-bottom:25px;
+    font-size:1.7rem;
+}
+
+.cart-items{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin-bottom:25px;
+    max-height:420px;
+    overflow:auto;
+}
+
+.cart-item{
+    background:var(--gray);
+    border-radius:20px;
+    padding:16px;
+}
+
+.cart-item strong{
+    display:block;
+    margin-bottom:5px;
+}
+
+.total{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:22px;
+    font-size:1.2rem;
+    font-weight:700;
+}
+
+.checkout{
+    width:100%;
+    background:var(--black);
+    color:white;
+    padding:16px;
+    border-radius:999px;
+    font-size:1rem;
+    font-weight:600;
+}
+
+.checkout:hover{
+    background:var(--lila-dark);
+}
+
+/* FEATURES */
+
+.features{
+    margin:70px 0;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.feature{
+    background:white;
+    padding:25px;
+    border-radius:28px;
+    border:1px solid var(--border);
+    text-align:center;
+}
+
+.feature h4{
+    margin:12px 0 8px;
+}
+
+/* FOOTER */
+
+footer{
+    margin-top:70px;
+    background:linear-gradient(135deg,#f3ecff,#e9dcff);
+    padding:60px 0 30px;
+    border-top-left-radius:60px;
+    border-top-right-radius:60px;
+}
+
+.footer-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:35px;
+}
+
+.footer-logo{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:18px;
+}
+
+.footer-logo img{
+    width:65px;
+    height:65px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+.footer-links{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.footer-links a{
+    color:var(--text);
+}
+
+.footer-links a:hover{
+    color:var(--lila-dark);
+}
+
+.copy{
+    text-align:center;
+    margin-top:45px;
+    color:var(--text);
+    font-size:.9rem;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1100px){
+
+    .store-layout{
+        grid-template-columns:1fr;
+    }
+
+    .cart{
+        position:relative;
+        top:0;
+    }
+}
+
+@media(max-width:900px){
+
+    .nav{
+        flex-direction:column;
+    }
+
+    .menu{
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+
+    .hero-slider{
+        padding:40px 30px;
+        min-height:450px;
+    }
+
+    .hero-content h2{
+        font-size:2.8rem;
+    }
+}
+
+@media(max-width:600px){
+
+    .hero-content h2{
+        font-size:2.2rem;
+    }
+
+    .category-btn{
+        width:100px;
+        height:100px;
+    }
+
+    .products{
+        grid-template-columns:1fr;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="container topbar-content">
+        <span>✨ Productos únicos y artesanales</span>
+        <span>💜 Diseños creativos y personalizados</span>
+    </div>
+</div>
+
+<header>
+    <div class="container nav">
+
+        <div class="logo">
+            <img id="logo" src="">
+            <div>
+                <h1 id="storeName">Noely Creaciones</h1>
+                <p id="storeDesc">Tienda creativa</p>
+            </div>
+        </div>
+
+        <nav class="menu">
+            <a href="#">Inicio</a>
+            <a href="#productos">Tienda</a>
+            <a href="#">Novedades</a>
+            <a href="#">Contacto</a>
+        </nav>
+
+        <button class="cart-btn">
+            Carrito (<span id="count">0</span>)
+        </button>
+
+    </div>
+</header>
+
+<section class="hero">
+    <div class="container">
+
+        <div class="hero-slider">
+
+            <div class="hero-content">
+                <span>✨ Colección artesanal</span>
+
+                <h2>
+                    Diseños únicos<br>
+                    para ti 💜
+                </h2>
+
+                <p>
+                    Descubre accesorios, manualidades y artículos creativos
+                    hechos con estilo y personalidad.
+                </p>
+
+                <a href="#productos" class="hero-btn">
+                    Ver productos
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<section class="container categories">
+
+    <button class="category-btn active">
+        ✨
+        <span>Todo</span>
+    </button>
+
+    <button class="category-btn">
+        🎀
+        <span>Manualidades</span>
+    </button>
+
+    <button class="category-btn">
+        💜
+        <span>Creativo</span>
+    </button>
+
+    <button class="category-btn">
+        🌙
+        <span>Accesorios</span>
+    </button>
+
+</section>
+
+<section class="container" id="productos">
+
+    <div class="section-title">
+        <h2>Nuestros Productos</h2>
+        <p>Detalles creativos que hacen la diferencia.</p>
+    </div>
+
+    <div class="store-layout">
+
+        <div class="products" id="products"></div>
+
+        <aside class="cart">
+
+            <h2>Tu Carrito</h2>
+
+            <div class="cart-items" id="cartItems">
+                <p style="color:#777;">
+                    Tu carrito está vacío.
+                </p>
+            </div>
+
+            <div class="total">
+                <span>Total</span>
+                <span id="total">$0 MXN</span>
+            </div>
+
+            <button class="checkout">
+                Finalizar Compra
+            </button>
+
+        </aside>
+
+    </div>
+
+</section>
+
+<section class="container features">
+
+    <div class="feature">
+        <h4>🚚 Envíos rápidos</h4>
+        <p>A todo México</p>
+    </div>
+
+    <div class="feature">
+        <h4>💜 Productos únicos</h4>
+        <p>Diseños originales</p>
+    </div>
+
+    <div class="feature">
+        <h4>🔒 Pago seguro</h4>
+        <p>Compra protegida</p>
+    </div>
+
+    <div class="feature">
+        <h4>⭐ Atención personalizada</h4>
+        <p>Estamos para ayudarte</p>
+    </div>
+
+</section>
+
+<footer>
+
+    <div class="container">
+
+        <div class="footer-grid">
+
+            <div>
+                <div class="footer-logo">
+                    <img id="footerLogo" src="">
+                    <div>
+                        <h3>Noely Creaciones</h3>
+                        <p>Tienda creativa</p>
+                    </div>
+                </div>
+
+                <p>
+                    Diseños únicos, accesorios y manualidades
+                    llenas de creatividad.
+                </p>
+            </div>
+
+            <div>
+                <h3>Categorías</h3>
+
+                <div class="footer-links">
+                    <a href="#">Manualidades</a>
+                    <a href="#">Accesorios</a>
+                    <a href="#">Colecciones</a>
+                </div>
+            </div>
+
+            <div>
+                <h3>Información</h3>
+
+                <div class="footer-links">
+                    <a href="#">Sobre nosotros</a>
+                    <a href="#">Envíos</a>
+                    <a href="#">Contacto</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="copy">
+            © 2026 Noely Creaciones
+        </div>
+
+    </div>
+
+</footer>
+
+<script>
+
+const API = 'https://routicket.com/tienda/get_tienda.php?id_tienda=15517';
+
+const productsEl = document.getElementById('products');
+const cartItems = document.getElementById('cartItems');
+const totalEl = document.getElementById('total');
+const countEl = document.getElementById('count');
+
+let carrito = [];
+
+async function loadStore(){
+
+    const res = await fetch(API);
+    const data = await res.json();
+
+    const tienda = data.data;
+
+    document.getElementById('storeName').textContent = tienda.titulo;
+    document.getElementById('storeDesc').textContent = tienda.descripcion;
+
+    document.getElementById('logo').src = tienda.foto;
+    document.getElementById('footerLogo').src = tienda.foto;
+
+    renderProducts(tienda.productos);
+}
+
+function renderProducts(products){
+
+    productsEl.innerHTML = '';
+
+    products.forEach(item=>{
+
+        const card = document.createElement('div');
+
+        card.className = 'card';
+
+        card.innerHTML = `
+            <div class="card-img">
+                <img src="${item.image}" alt="${item.name}">
+            </div>
+
+            <div class="card-content">
+
+                <h3>${item.name}</h3>
+
+                <p>
+                    ${item.description || 'Producto artesanal y creativo.'}
+                </p>
+
+                <div class="price">
+                    $${item.price} MXN
+                </div>
+
+                <button class="add-btn">
+                    Agregar al carrito
+                </button>
+
+            </div>
+        `;
+
+        card.querySelector('.add-btn')
+        .addEventListener('click', ()=>{
+
+            carrito.push(item);
+
+            updateCart();
+        });
+
+        productsEl.appendChild(card);
+    });
+}
+
+function updateCart(){
+
+    cartItems.innerHTML = '';
+
+    let total = 0;
+
+    carrito.forEach(item=>{
+
+        total += Number(item.price);
+
+        cartItems.innerHTML += `
+            <div class="cart-item">
+                <strong>${item.name}</strong>
+                <p>$${item.price} MXN</p>
+            </div>
+        `;
+    });
+
+    totalEl.textContent = '$' + total + ' MXN';
+    countEl.textContent = carrito.length;
+}
+
+loadStore();
+
+</script>
+
+</body>
+</html>
