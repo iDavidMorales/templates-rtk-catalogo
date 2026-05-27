@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Digital - Routicket</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            scroll-behavior: smooth;
+        }
+        /* Ocultar barra de scroll en navegadores */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Animaciones suaves */
+        .transition-all-300 {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .cart-drawer {
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .cart-drawer.open {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Indicador de Carga / Spinner -->
+    <div id="loading-overlay" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="relative flex items-center justify-center">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-orange-500"></div>
+            <img src="https://routicket.com/map/images/marker.png" onerror="this.src='https://i.imgur.com/EoN5UT9.jpeg'" class="absolute h-8 w-8 rounded-full" alt="Logo">
+        </div>
+        <p class="text-slate-500 mt-4 font-medium animate-pulse">Obteniendo menú delicioso...</p>
+    </div>
+
+    <!-- Contenedor Principal de la App -->
+    <div id="app" class="hidden flex-1 flex flex-col max-w-lg mx-auto bg-white min-h-screen shadow-2xl relative pb-24">
+        
+        <!-- Barra Superior de Navegación (Reemplaza el Banner) -->
+        <div class="px-5 pt-5 pb-3 flex justify-between items-center border-b border-slate-100 bg-white sticky top-0 z-30">
+            <a href="https://www.routicket.com" class="bg-slate-100 text-slate-800 p-2.5 rounded-full hover:bg-slate-200 transition-all-300 flex items-center justify-center w-10 h-10">
+                <i class="fa-solid fa-arrow-left text-sm"></i>
+            </a>
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Menú de Routicket</span>
+            <button onclick="shareMenu()" class="bg-slate-100 text-slate-800 p-2.5 rounded-full hover:bg-slate-200 transition-all-300 flex items-center justify-center w-10 h-10">
+                <i class="fa-solid fa-share-nodes text-sm"></i>
+            </button>
+        </div>
+
+        <!-- Info de la Tienda -->
+        <div class="px-5 mt-5 relative z-10">
+            <div class="bg-white rounded-2xl p-5 shadow-md border border-slate-100">
+                <div class="flex items-start justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h1 id="store-title" class="text-2xl font-extrabold text-slate-950 tracking-tight">Cargando Tienda...</h1>
+                            <span id="store-status" class="px-2 py-0.5 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800 flex items-center gap-1">
+                                <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping"></span> Activo
+                            </span>
+                        </div>
+                        <p id="store-description" class="text-sm text-slate-500 mt-1.5 leading-relaxed">...</p>
+                    </div>
+                    <img id="store-logo" src="" alt="Logo Tienda" class="w-20 h-20 rounded-2xl object-cover border-2 border-slate-100 shadow-md bg-white">
+                </div>
+
+                <!-- Detalles de Contacto rápidos -->
+                <div class="grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-slate-100 text-center text-xs font-semibold text-slate-600">
+                    <a id="btn-phone" href="#" class="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-slate-50 transition-all-300">
+                        <span class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </span>
+                        <span>Llamar / Chat</span>
+                    </a>
+                    <a id="btn-maps" href="#" target="_blank" class="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-slate-50 transition-all-300">
+                        <span class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </span>
+                        <span>Cómo Llegar</span>
+                    </a>
+                    <div class="flex flex-col items-center gap-1.5 p-2 rounded-xl">
+                        <span class="w-8 h-8 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-eye"></i>
+                        </span>
+                        <span id="store-views">0 Visitas</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buscador -->
+        <div class="px-5 mt-5">
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input type="text" id="search-input" oninput="filterProducts()" placeholder="¿Qué se te antoja hoy?..." class="w-full pl-11 pr-4 py-3 bg-slate-100 focus:bg-white border border-transparent focus:border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-4 focus:ring-orange-100 transition-all-300">
+            </div>
+        </div>
+
+        <!-- Categorías (Slider Horizontal) -->
+        <div class="mt-4 sticky top-0 bg-white/95 backdrop-blur-md z-20 py-3 border-b border-slate-100">
+            <div id="categories-container" class="flex gap-2 overflow-x-auto px-5 no-scrollbar scroll-smooth">
+                <!-- Se inyecta dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Lista de Productos -->
+        <div class="px-5 mt-4 flex-1">
+            <div id="products-list" class="space-y-4">
+                <!-- Se inyecta dinámicamente -->
+            </div>
+            
+            <!-- Estado vacío de búsqueda -->
+            <div id="empty-state" class="hidden flex-col items-center justify-center py-16 text-center">
+                <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 mb-3 text-xl">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+                <h3 class="font-bold text-slate-800">No encontramos platillos</h3>
+                <p class="text-sm text-slate-400 mt-1">Prueba buscando otra cosa o cambia de categoría.</p>
+            </div>
+        </div>
+
+        <!-- Barra inferior flotante del Carrito -->
+        <div id="cart-bar" class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-lg bg-white/90 backdrop-blur-lg border-t border-slate-100 px-5 py-4 flex items-center justify-between shadow-[0_-8px_30px_rgb(0,0,0,0.06)] z-30 transition-all duration-300 translate-y-full">
+            <div class="flex items-center gap-3">
+                <div class="relative">
+                    <span class="w-10 h-10 rounded-xl bg-orange-500 text-white flex items-center justify-center text-lg shadow-md shadow-orange-200">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                    </span>
+                    <span id="cart-badge" class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white animate-bounce">0</span>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-400 font-medium">Total Estimado</p>
+                    <p id="cart-total-bar" class="text-base font-extrabold text-slate-900">$0.00</p>
+                </div>
+            </div>
+            <button onclick="toggleCart(true)" class="bg-orange-500 hover:bg-orange-600 active:scale-95 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg shadow-orange-100 transition-all-300 flex items-center gap-2">
+                Ver Mi Pedido <i class="fa-solid fa-arrow-right text-xs"></i>
+            </button>
+        </div>
+
+        <!-- Alertas personalizadas -->
+        <div id="custom-toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 backdrop-blur text-white py-3 px-5 rounded-xl shadow-2xl flex items-center gap-2 text-sm font-semibold transition-all duration-300 translate-y-[-150%] opacity-0">
+            <i class="fa-solid fa-circle-check text-emerald-400"></i>
+            <span id="toast-message">¡Producto añadido al carrito!</span>
+        </div>
+
+        <!-- Modal Detalles del Producto -->
+        <div id="product-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end justify-center hidden opacity-0 transition-opacity duration-300">
+            <div class="bg-white w-full max-w-lg rounded-t-3xl overflow-hidden shadow-2xl transform translate-y-full transition-transform duration-300 max-h-[90vh] flex flex-col">
+                <div class="relative h-64 bg-slate-100">
+                    <img id="modal-image" src="" alt="Producto" class="w-full h-full object-cover">
+                    <button onclick="closeProductModal()" class="absolute top-4 right-4 bg-black/40 hover:bg-black/60 text-white w-8 h-8 rounded-full flex items-center justify-center transition-all-300">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="p-6 overflow-y-auto flex-1">
+                    <div class="flex justify-between items-start gap-4">
+                        <h2 id="modal-name" class="text-xl font-bold text-slate-950">---</h2>
+                        <span id="modal-price" class="text-xl font-extrabold text-orange-500">$--</span>
+                    </div>
+                    <p id="modal-description" class="text-slate-500 text-sm mt-3 leading-relaxed">Sin descripción disponible.</p>
+                    
+                    <div class="mt-6 pt-6 border-t border-slate-100">
+                        <h4 class="font-bold text-slate-800 text-sm mb-3">Notas especiales o especificaciones:</h4>
+                        <textarea id="modal-notes" placeholder="Ej. Sin cebolla, aderezo extra, etc." class="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 resize-none h-20 transition-all-300"></textarea>
+                    </div>
+                </div>
+                <div class="p-6 bg-slate-50 border-t border-slate-100 flex gap-4 items-center">
+                    <div class="flex items-center bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                        <button onclick="updateModalQuantity(-1)" class="px-4 py-3 text-slate-600 hover:bg-slate-50 active:scale-95 transition-all-300"><i class="fa-solid fa-minus"></i></button>
+                        <span id="modal-quantity" class="px-4 font-bold text-slate-900 w-12 text-center">1</span>
+                        <button onclick="updateModalQuantity(1)" class="px-4 py-3 text-slate-600 hover:bg-slate-50 active:scale-95 transition-all-300"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <button id="modal-add-btn" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-orange-100 transition-all-300">
+                        Agregar al Carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Drawer/Modal de Carrito de Compras -->
+        <div id="cart-drawer-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300" onclick="toggleCart(false)"></div>
+        <div id="cart-drawer" class="fixed top-0 right-0 bottom-0 w-full max-w-md bg-white z-50 shadow-2xl cart-drawer flex flex-col">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-basket-shopping text-orange-500 text-lg"></i>
+                    <h3 class="font-bold text-slate-900 text-lg">Tu Carrito de Pedido</h3>
+                </div>
+                <button onclick="toggleCart(false)" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Items del Carrito -->
+            <div id="cart-items" class="flex-1 overflow-y-auto p-5 space-y-4">
+                <!-- Se inyectan dinámicamente -->
+            </div>
+
+            <!-- Formulario de Entrega & Confirmación -->
+            <div class="p-5 border-t border-slate-100 bg-slate-50 space-y-4 max-h-[50vh] overflow-y-auto">
+                <h4 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-truck-ramp-box mr-2 text-orange-500"></i>Información para la entrega</h4>
+                
+                <div class="grid grid-cols-2 gap-2">
+                    <label class="border border-slate-200 rounded-xl p-3 flex items-center gap-2 cursor-pointer bg-white transition-all-300" id="label-delivery">
+                        <input type="radio" name="order-type" value="Domicilio" checked onchange="toggleOrderType('Domicilio')" class="accent-orange-500">
+                        <span class="text-xs font-semibold text-slate-700">A Domicilio</span>
+                    </label>
+                    <label class="border border-slate-200 rounded-xl p-3 flex items-center gap-2 cursor-pointer bg-white transition-all-300" id="label-pickup">
+                        <input type="radio" name="order-type" value="Sucursal" onchange="toggleOrderType('Sucursal')" class="accent-orange-500">
+                        <span class="text-xs font-semibold text-slate-700">Pasar a Tienda</span>
+                    </label>
+                </div>
+
+                <div class="space-y-3">
+                    <input type="text" id="cust-name" placeholder="Tu nombre *" class="w-full p-3 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-orange-200 transition-all-300">
+                    <input type="text" id="cust-address" placeholder="Dirección completa de entrega *" class="w-full p-3 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-orange-200 transition-all-300">
+                    <input type="text" id="cust-notes" placeholder="Notas adicionales del envío o método de pago..." class="w-full p-3 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-orange-200 transition-all-300">
+                </div>
+
+                <!-- Detalle de Cuentas -->
+                <div class="pt-3 border-t border-slate-200 space-y-2 text-xs font-medium text-slate-500">
+                    <div class="flex justify-between">
+                        <span>Subtotal</span>
+                        <span id="summary-subtotal">$0.00</span>
+                    </div>
+                    <div id="delivery-row" class="flex justify-between">
+                        <span>Envío estimado</span>
+                        <span class="text-emerald-600 font-semibold">¡A convenir!</span>
+                    </div>
+                    <div class="flex justify-between text-sm font-bold text-slate-900 pt-2 border-t border-dashed border-slate-200">
+                        <span>Total del Pedido</span>
+                        <span id="summary-total" class="text-base text-orange-500 font-extrabold">$0.00</span>
+                    </div>
+                </div>
+
+                <!-- Botón Enviar Pedido -->
+                <button onclick="submitOrder()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-emerald-100 flex items-center justify-center gap-2 transition-all-300 active:scale-95">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    Pedir por WhatsApp
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script de lógica de la aplicación -->
+    <script>
+        // Configuración y Estado Global
+        const STORE_ID = "15510";
+        const API_URL = `https://routicket.com/tienda/get_tienda.php?id_tienda=${STORE_ID}`;
+        
+        let storeData = null;
+        let cart = [];
+        let activeCategory = 'all';
+        let currentModalProduct = null;
+        let currentModalQty = 1;
+
+        // JSON de Respaldo por si falla la API (CORS o Red)
+        const mockStoreData = {
+            "success": true,
+            "data": {
+                "user_id": 1446,
+                "titulo": "Da2 Comida a Domicilio",
+                "foto": "https://i.imgur.com/EoN5UT9.jpeg",
+                "descripcion": "Las mejores pizzas artesanales y gourmet, hamburguesas jugosas y deliciosas especialidades a domicilio.",
+                "views": 324,
+                "maps": "https://routicket.com/map",
+                "url": "https://www.routicket.com",
+                "tel": "+529841400774",
+                "status": "activo",
+                "lat": "20.635823",
+                "lng": "-87.075791",
+                "direccion": "Calle 24 Nte, Playa del Carmen, Q.R.",
+                "video": "",
+                "color": "F97316", // Color naranja
+                "foto_ticket": "https://i.imgur.com/Ol98FF8.png",
+                "productos": [
+                    {
+                        "id": 95,
+                        "name": "Mexicana (Mega)",
+                        "description": "Frijoles refritos, chorizo, tocino, jalapeños frescos, cebolla morada y abundante queso mozzarella.",
+                        "price": 238,
+                        "image": "https://i.imgur.com/ypWVqoW.jpeg",
+                        "id_categoria": 6,
+                        "category_name": "Pizzas Clásicas"
+                    },
+                    {
+                        "id": 75,
+                        "name": "Pizza Camarones (Grande)",
+                        "description": "Camarones salteados al ajo, cebolla morada, finas rebanadas de tomate rojo, aderezo cremoso de ajo, pimienta y mezcla de quesos.",
+                        "price": 250,
+                        "image": "https://i.imgur.com/YwV9J47.jpeg",
+                        "id_categoria": 5,
+                        "category_name": "Pizzas Gourmet"
+                    },
+                    {
+                        "id": 101,
+                        "name": "Pizza Pepperoni Especial",
+                        "description": "Doble porción de pepperoni crujiente, salsa de tomate de la casa y orilla de queso fundido.",
+                        "price": 189,
+                        "image": "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=500&q=80",
+                        "id_categoria": 6,
+                        "category_name": "Pizzas Clásicas"
+                    },
+                    {
+                        "id": 102,
+                        "name": "Hamburguesa Da2 Suprema",
+                        "description": "Carne de res premium (150g), tocino ahumado, queso cheddar fundido, aros de cebolla crujientes, aderezo BBQ y vegetales frescos.",
+                        "price": 145,
+                        "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=80",
+                        "id_categoria": 7,
+                        "category_name": "Hamburguesas"
+                    },
+                    {
+                        "id": 103,
+                        "name": "Papas de la Casa Sazonadas",
+                        "description": "Papas corte canoa crujientes sazonadas con especias especiales, acompañadas de aderezo chipotle de la casa.",
+                        "price": 75,
+                        "image": "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=500&q=80",
+                        "id_categoria": 8,
+                        "category_name": "Entradas & Snacks"
+                    }
+                ]
+            }
+        };
+
+        // Inicio en la carga del DOM
+        window.onload = function() {
+            initApp();
+        };
+
+        // Inicializar la App
+        async function initApp() {
+            try {
+                // Intentar obtener datos reales
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error("Error al consultar API");
+                const resJson = await response.json();
+                
+                if (resJson && resJson.success && resJson.data) {
+                    storeData = resJson.data;
+                    console.log("Datos cargados exitosamente desde API");
+                } else {
+                    throw new Error("Formato inválido de API");
+                }
+            } catch (error) {
+                console.warn("Fallo la carga remota (CORS o Red), cargando Mock de Respaldo interactivo:", error.message);
+                storeData = mockStoreData.data;
+                showToast("Cargado en modo Demostración");
+            }
+
+            renderStoreInfo();
+            renderCategories();
+            renderProducts();
+            
+            // Animación de salida del loader
+            const loader = document.getElementById("loading-overlay");
+            loader.classList.add("opacity-0");
+            setTimeout(() => {
+                loader.classList.add("hidden");
+                document.getElementById("app").classList.remove("hidden");
+            }, 500);
+        }
+
+        // Renderizar Información del Comercio
+        function renderStoreInfo() {
+            document.getElementById("store-title").textContent = storeData.titulo;
+            document.getElementById("store-description").textContent = storeData.descripcion || "¡Bienvenidos! Sabores únicos directo a tu puerta.";
+            document.getElementById("store-logo").src = storeData.foto || 'https://i.imgur.com/EoN5UT9.jpeg';
+            document.getElementById("store-views").textContent = `${storeData.views || 100} Visitas`;
+
+            // Configurar Enlaces de Contacto
+            const whatsappMsg = encodeURIComponent(`¡Hola! Estoy viendo el menú de ${storeData.titulo} en Routicket y me gustaría ordenar.`);
+            document.getElementById("btn-phone").href = `https://wa.me/${storeData.tel}?text=${whatsappMsg}`;
+            document.getElementById("btn-maps").href = storeData.maps || "https://maps.google.com";
+
+            // Aplicar Color Personalizado si existe
+            if (storeData.color && storeData.color !== "FFFFFF") {
+                const accentColor = `#${storeData.color}`;
+                // Podríamos inyectar dinámicamente un estilo para cambiar los colores primarios
+            }
+        }
+
+        // Obtener Categorías Únicas
+        function getCategories() {
+            const categories = [{ id: 'all', name: 'Todos' }];
+            const seen = new Set();
+            
+            if (storeData.productos && storeData.productos.length > 0) {
+                storeData.productos.forEach(prod => {
+                    if (prod.category_name && !seen.has(prod.category_name)) {
+                        seen.add(prod.category_name);
+                        categories.push({
+                            id: prod.id_categoria || prod.category_name.toLowerCase().replace(/\s+/g, '-'),
+                            name: prod.category_name
+                        });
+                    }
+                });
+            }
+            return categories;
+        }
+
+        // Renderizar Pestañas de Categorías
+        function renderCategories() {
+            const categories = getCategories();
+            const container = document.getElementById("categories-container");
+            container.innerHTML = "";
+
+            categories.forEach(cat => {
+                const isActive = activeCategory === cat.id;
+                const btn = document.createElement("button");
+                btn.className = `px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all-300 ${
+                    isActive 
+                    ? 'bg-orange-500 text-white shadow-md shadow-orange-100' 
+                    : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+                }`;
+                btn.textContent = cat.name;
+                btn.onclick = () => selectCategory(cat.id);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectCategory(catId) {
+            activeCategory = catId;
+            renderCategories();
+            renderProducts();
+        }
+
+        // Renderizar Productos
+        function renderProducts() {
+            const listContainer = document.getElementById("products-list");
+            const emptyState = document.getElementById("empty-state");
+            listContainer.innerHTML = "";
+
+            const query = document.getElementById("search-input").value.toLowerCase().trim();
+            
+            // Filtrado
+            const filtered = storeData.productos.filter(prod => {
+                // Filtro Categoría
+                let matchCat = false;
+                if (activeCategory === 'all') {
+                    matchCat = true;
+                } else {
+                    const prodCatId = prod.id_categoria || prod.category_name.toLowerCase().replace(/\s+/g, '-');
+                    matchCat = String(prodCatId) === String(activeCategory);
+                }
+
+                // Filtro Buscador
+                const matchSearch = prod.name.toLowerCase().includes(query) || 
+                                    (prod.description && prod.description.toLowerCase().includes(query));
+
+                return matchCat && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove("hidden");
+                emptyState.classList.add("flex");
+            } else {
+                emptyState.classList.add("hidden");
+                emptyState.classList.remove("flex");
+
+                filtered.forEach(prod => {
+                    const card = document.createElement("div");
+                    card.className = "bg-white border border-slate-100 rounded-2xl p-4 flex gap-4 hover:shadow-lg transition-all-300 relative group cursor-pointer";
+                    card.onclick = () => openProductModal(prod);
+
+                    // Formatear precio
+                    const formattedPrice = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(prod.price);
+
+                    card.innerHTML = `
+                        <div class="w-24 h-24 rounded-xl overflow-hidden bg-slate-50 flex-shrink-0 relative">
+                            <img src="${prod.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&q=80'}" 
+                                 onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&q=80'"
+                                 alt="${prod.name}" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500">
+                        </div>
+                        <div class="flex-1 flex flex-col justify-between">
+                            <div>
+                                <h3 class="font-bold text-slate-900 group-hover:text-orange-500 transition-colors duration-300 text-sm md:text-base leading-snug">${prod.name}</h3>
+                                <p class="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">${prod.description || 'Sin descripción disponible.'}</p>
+                            </div>
+                            <div class="flex justify-between items-center mt-2">
+                                <span class="font-extrabold text-slate-950 text-base">${formattedPrice}</span>
+                                <button onclick="stopPropagationAndAdd(event, ${prod.id})" class="bg-orange-50 hover:bg-orange-500 text-orange-500 hover:text-white p-2 rounded-xl transition-all-300 active:scale-90 flex items-center justify-center w-9 h-9">
+                                    <i class="fa-solid fa-plus text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    listContainer.appendChild(card);
+                });
+            }
+        }
+
+        // Detener propagación para agregar rápido desde el botón de la card sin abrir modal
+        function stopPropagationAndAdd(event, productId) {
+            event.stopPropagation();
+            const prod = storeData.productos.find(p => p.id === productId);
+            if (prod) {
+                addToCart(prod, 1, "");
+            }
+        }
+
+        // Filtrar productos al escribir
+        function filterProducts() {
+            renderProducts();
+        }
+
+        // Funciones del Modal Detalles del Producto
+        function openProductModal(product) {
+            currentModalProduct = product;
+            currentModalQty = 1;
+            
+            document.getElementById("modal-image").src = product.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&q=80';
+            document.getElementById("modal-name").textContent = product.name;
+            document.getElementById("modal-price").textContent = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(product.price);
+            document.getElementById("modal-description").textContent = product.description || 'Delicioso platillo preparado con ingredientes de primera calidad.';
+            document.getElementById("modal-notes").value = "";
+            document.getElementById("modal-quantity").textContent = currentModalQty;
+
+            // Configurar acción del botón agregar
+            const btn = document.getElementById("modal-add-btn");
+            btn.onclick = () => {
+                const notes = document.getElementById("modal-notes").value.trim();
+                addToCart(product, currentModalQty, notes);
+                closeProductModal();
+            };
+
+            const modal = document.getElementById("product-modal");
+            modal.classList.remove("hidden");
+            setTimeout(() => {
+                modal.classList.add("opacity-100");
+                modal.querySelector("div").classList.remove("translate-y-full");
+            }, 50);
+        }
+
+        function closeProductModal() {
+            const modal = document.getElementById("product-modal");
+            modal.classList.remove("opacity-100");
+            modal.querySelector("div").classList.add("translate-y-full");
+            setTimeout(() => {
+                modal.classList.add("hidden");
+                currentModalProduct = null;
+            }, 300);
+        }
+
+        function updateModalQuantity(change) {
+            currentModalQty += change;
+            if (currentModalQty < 1) currentModalQty = 1;
+            document.getElementById("modal-quantity").textContent = currentModalQty;
+        }
+
+        // Gestión del Carrito
+        function addToCart(product, qty, notes = "") {
+            // Revisar si ya existe el mismo artículo con las mismas notas
+            const existingItem = cart.find(item => item.id === product.id && item.notes === notes);
+            
+            if (existingItem) {
+                existingItem.qty += qty;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    qty: qty,
+                    notes: notes
+                });
+            }
+
+            showToast(`¡Añadido: ${product.name}!`);
+            updateCartUI();
+        }
+
+        function updateCartQuantity(index, change) {
+            cart[index].qty += change;
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+                showToast("Producto eliminado del pedido");
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const cartItemsContainer = document.getElementById("cart-items");
+            cartItemsContainer.innerHTML = "";
+
+            let total = 0;
+            let totalItems = 0;
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-16 text-center text-slate-400">
+                        <i class="fa-solid fa-cart-shopping text-4xl mb-3"></i>
+                        <p class="font-bold">Tu carrito está vacío</p>
+                        <p class="text-xs mt-1">Explora nuestro menú y añade tus platillos favoritos.</p>
+                    </div>
+                `;
+                // Ocultar barra de carrito inferior
+                document.getElementById("cart-bar").classList.add("translate-y-full");
+            } else {
+                cart.forEach((item, index) => {
+                    total += item.price * item.qty;
+                    totalItems += item.qty;
+
+                    const itemElement = document.createElement("div");
+                    itemElement.className = "flex gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-100 relative group";
+                    itemElement.innerHTML = `
+                        <img src="${item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&q=80'}" 
+                             onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&q=80'"
+                             alt="${item.name}" 
+                             class="w-16 h-16 rounded-xl object-cover">
+                        <div class="flex-1 flex flex-col justify-between">
+                            <div>
+                                <h5 class="font-bold text-slate-900 text-xs md:text-sm">${item.name}</h5>
+                                ${item.notes ? `<p class="text-[10px] text-orange-500 font-medium italic mt-0.5"><i class="fa-solid fa-comment mr-1"></i>"${item.notes}"</p>` : ''}
+                            </div>
+                            <div class="flex justify-between items-center mt-1">
+                                <span class="font-extrabold text-slate-950 text-sm">${new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(item.price * item.qty)}</span>
+                                <div class="flex items-center bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm scale-90">
+                                    <button onclick="updateCartQuantity(${index}, -1)" class="px-2 py-1 text-slate-500 hover:bg-slate-100 transition-colors"><i class="fa-solid fa-minus text-[10px]"></i></button>
+                                    <span class="px-2.5 font-bold text-slate-900 text-xs">${item.qty}</span>
+                                    <button onclick="updateCartQuantity(${index}, 1)" class="px-2 py-1 text-slate-500 hover:bg-slate-100 transition-colors"><i class="fa-solid fa-plus text-[10px]"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    cartItemsContainer.appendChild(itemElement);
+                });
+
+                // Mostrar barra de carrito inferior
+                document.getElementById("cart-bar").classList.remove("translate-y-full");
+            }
+
+            // Actualizar textos de precios y contadores
+            const formattedTotal = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(total);
+            document.getElementById("cart-badge").textContent = totalItems;
+            document.getElementById("cart-total-bar").textContent = formattedTotal;
+            document.getElementById("summary-subtotal").textContent = formattedTotal;
+            document.getElementById("summary-total").textContent = formattedTotal;
+        }
+
+        // Alternar el Drawer del Carrito
+        function toggleCart(open) {
+            const drawer = document.getElementById("cart-drawer");
+            const overlay = document.getElementById("cart-drawer-overlay");
+
+            if (open) {
+                overlay.classList.remove("hidden");
+                setTimeout(() => {
+                    overlay.classList.add("opacity-100");
+                    drawer.classList.add("open");
+                }, 50);
+            } else {
+                drawer.classList.remove("open");
+                overlay.classList.remove("opacity-100");
+                setTimeout(() => {
+                    overlay.classList.add("hidden");
+                }, 300);
+            }
+        }
+
+        // Alternar modo de entrega
+        function toggleOrderType(type) {
+            const addressInput = document.getElementById("cust-address");
+            const deliveryRow = document.getElementById("delivery-row");
+            
+            if (type === "Sucursal") {
+                addressInput.placeholder = "Punto de entrega en Sucursal o mesa (opcional)";
+                addressInput.value = "Pasaré a recoger en sucursal";
+                addressInput.disabled = true;
+                addressInput.classList.add("opacity-60");
+                deliveryRow.classList.add("hidden");
+            } else {
+                addressInput.placeholder = "Dirección completa de entrega *";
+                addressInput.value = "";
+                addressInput.disabled = false;
+                addressInput.classList.remove("opacity-60");
+                deliveryRow.classList.remove("hidden");
+            }
+        }
+
+        // Mostrar Notificaciones (Toast)
+        function showToast(message) {
+            const toast = document.getElementById("custom-toast");
+            document.getElementById("toast-message").textContent = message;
+            
+            toast.classList.remove("translate-y-[-150%]", "opacity-0");
+            toast.classList.add("translate-y-0", "opacity-100");
+
+            setTimeout(() => {
+                toast.classList.add("translate-y-[-150%]", "opacity-0");
+                toast.classList.remove("translate-y-0", "opacity-100");
+            }, 2500);
+        }
+
+        // Compartir el menú
+        function shareMenu() {
+            const shareUrl = window.location.href;
+            if (navigator.share) {
+                navigator.share({
+                    title: storeData.titulo,
+                    text: `Mira el menú interactivo de ${storeData.titulo} y haz tu pedido:`,
+                    url: shareUrl,
+                }).catch(console.error);
+            } else {
+                // Clipboard fallback sugerido por lineamientos
+                document.execCommand('copy');
+                const dummy = document.createElement('input');
+                document.body.appendChild(dummy);
+                dummy.value = shareUrl;
+                dummy.select();
+                document.execCommand('copy');
+                document.body.removeChild(dummy);
+                showToast("¡Enlace copiado al portapapeles!");
+            }
+        }
+
+        // Procesar Pedido y enviar a WhatsApp
+        function submitOrder() {
+            if (cart.length === 0) {
+                showToast("Tu carrito está vacío.");
+                return;
+            }
+
+            const name = document.getElementById("cust-name").value.trim();
+            const address = document.getElementById("cust-address").value.trim();
+            const notes = document.getElementById("cust-notes").value.trim();
+            const type = document.querySelector('input[name="order-type"]:checked').value;
+
+            if (!name) {
+                showToast("Por favor, ingresa tu nombre.");
+                return;
+            }
+
+            if (type === "Domicilio" && !address) {
+                showToast("Por favor, ingresa la dirección de entrega.");
+                return;
+            }
+
+            // Construir mensaje de WhatsApp
+            let message = `*NUEVO PEDIDO DESDE EL MENÚ DIGITAL* 🛍️🍔\n\n`;
+            message += `👤 *Cliente:* ${name}\n`;
+            message += `🛵 *Tipo de entrega:* ${type === 'Domicilio' ? 'A domicilio' : 'Recoger en Sucursal'}\n`;
+            
+            if (type === 'Domicilio') {
+                message += `📍 *Dirección:* ${address}\n`;
+            }
+            if (notes) {
+                message += `📝 *Comentarios del envío:* ${notes}\n`;
+            }
+            message += `\n-----------------------------\n`;
+            message += `🛒 *DETALLE DEL PEDIDO:*\n`;
+
+            let total = 0;
+            cart.forEach(item => {
+                const sub = item.price * item.qty;
+                total += sub;
+                message += `• *${item.qty}x ${item.name}* - _${new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(item.price)} c/u_\n`;
+                if (item.notes) {
+                    message += `  ↳ _Nota: ${item.notes}_\n`;
+                }
+            });
+
+            message += `-----------------------------\n`;
+            message += `💰 *TOTAL ESTIMADO:* *${new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(total)}*\n\n`;
+            message += `⚡ Pedido generado vía *Routicket*`;
+
+            // Enviar pedido al número telefónico de la tienda
+            const phoneNumber = storeData.tel.replace(/\+/g, '').replace(/\s+/g, '');
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            
+            window.open(whatsappUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
