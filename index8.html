@@ -1,576 +1,1805 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Delivery App | Routicket</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --rappi-orange: #FF441F;
-            --rappi-hover: #E33B1A;
-            --bg-gray: #F2F4F5;
-            --card-border: #E8E8E8;
-            --text-main: #333333;
-            --text-muted: #8F8F8F;
-            --green-success: #00B260;
-        }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Nunito', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            background-color: var(--bg-gray);
-            color: var(--text-main);
-            padding-bottom: 100px; /* Espacio para el carrito flotante */
-        }
+<title>Noely Creaciones</title>
 
-        /* HEADER TIPO APP */
-        header {
-            background: white;
-            padding: 15px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-        .address-bar {
-            display: flex;
-            flex-direction: column;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-        .address-bar span {
-            font-size: 12px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
+<style>
 
-        .address-bar strong {
-            font-size: 15px;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .address-bar strong::after {
-            content: '▼';
-            font-size: 10px;
-            color: var(--rappi-orange);
-        }
-
-        /* CARRUSEL DE CATEGORÍAS */
-        .categories {
-            background: white;
-            padding: 10px 20px 15px;
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            white-space: nowrap;
-            border-bottom: 1px solid var(--card-border);
-        }
-
-        .categories::-webkit-scrollbar {
-            display: none; /* Ocultar scrollbar en móviles */
-        }
-
-        .cat-pill {
-            background: var(--bg-gray);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-main);
-            cursor: pointer;
-        }
-
-        .cat-pill.active {
-            background: var(--rappi-orange);
-            color: white;
-        }
-
-        /* CONTENEDOR PRINCIPAL */
-        .container {
-            max-width: 800px; /* Diseño centrado en PC, fluido en móvil */
-            margin: 0 auto;
-            padding: 15px;
-        }
-
-        .store-title {
-            font-size: 22px;
-            font-weight: 800;
-            margin: 10px 0 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* TARJETAS HORIZONTALES ESTILO DELIVERY */
-        .product-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            display: flex;
-            gap: 15px;
-            border: 1px solid var(--card-border);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-            position: relative;
-        }
-
-        .product-info {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .product-info h3 {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 4px;
-            line-height: 1.2;
-        }
-
-        .product-info p {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            line-height: 1.4;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        /* Controles de Opciones Integrados */
-        .options {
-            margin-bottom: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .options select {
-            width: 100%;
-            padding: 6px 10px;
-            border-radius: 6px;
-            border: 1px solid var(--card-border);
-            font-size: 13px;
-            background: var(--bg-gray);
-            outline: none;
-        }
-
-        .options label {
-            font-size: 13px;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .options input[type="checkbox"] {
-            accent-color: var(--rappi-orange);
-            width: 16px;
-            height: 16px;
-        }
-
-        .product-price {
-            font-size: 16px;
-            font-weight: 800;
-            color: var(--text-main);
-            margin-top: auto;
-        }
-
-        .product-image-container {
-            width: 110px;
-            height: 110px;
-            position: relative;
-            flex-shrink: 0;
-        }
-
-        .product-image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-
-        .add-btn {
-            position: absolute;
-            bottom: -10px;
-            right: 50%;
-            transform: translateX(50%);
-            background: white;
-            color: var(--rappi-orange);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            padding: 4px 16px;
-            font-size: 14px;
-            font-weight: 700;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .add-btn:active {
-            transform: translateX(50%) scale(0.95);
-            background: var(--bg-gray);
-        }
-
-        /* CANASTA FLOTANTE BOTTOM BAR */
-        .floating-cart-wrapper {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(150%);
-            width: 90%;
-            max-width: 500px;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 100;
-        }
-
-        .floating-cart-wrapper.visible {
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .floating-cart {
-            background: var(--rappi-orange);
-            color: white;
-            border-radius: 12px;
-            padding: 16px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 10px 20px rgba(255, 68, 31, 0.3);
-            cursor: pointer;
-        }
-
-        .cart-qty {
-            background: rgba(0,0,0,0.15);
-            padding: 4px 10px;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .cart-text {
-            font-weight: 700;
-            font-size: 15px;
-        }
-
-        .cart-total-price {
-            font-weight: 800;
-            font-size: 16px;
-        }
-
-        /* MODAL DE CARRITO (BOTTOM SHEET) */
-        .cart-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: 0.3s;
-        }
-
-        .cart-modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .cart-modal {
-            position: fixed;
-            bottom: -100%;
-            left: 0;
-            width: 100%;
-            background: white;
-            border-radius: 20px 20px 0 0;
-            z-index: 1001;
-            padding: 20px;
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1);
-            max-height: 80vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .cart-modal.active {
-            bottom: 0;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--card-border);
-        }
-
-        .modal-header h2 {
-            font-size: 18px;
-            font-weight: 800;
-        }
-
-        .close-modal {
-            background: var(--bg-gray);
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            font-size: 16px;
-            font-weight: bold;
-            color: var(--text-main);
-            cursor: pointer;
-        }
-
-        .modal-body {
-            overflow-y: auto;
-            flex: 1;
-            padding-bottom: 20px;
-        }
-
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px dashed var(--card-border);
-        }
-
-        .item-details h4 {
-            font-size: 15px;
-            font-weight: 700;
-        }
-
-        .item-details span {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .item-price {
-            font-weight: 800;
-            font-size: 15px;
-        }
-
-        .checkout-btn {
-            background: var(--rappi-orange);
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 800;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <div class="address-bar">
-            <span>Entregando en</span>
-            <strong>Av. Principal, Ciudad ▾</strong>
-        </div>
-    </header>
-
-    <div class="categories">
-        <div class="cat-pill active">🍕 Pizzas</div>
-        <div class="cat-pill">🥤 Bebidas</div>
-        <div class="cat-pill">🍰 Postres</div>
-        <div class="cat-pill">🥗 Entradas</div>
-    </div>
-
-    <div class="container">
-        <h1 class="store-title" id="storeName">Cargando restaurante...</h1>
-        <div class="product-list" id="products">
-            <!-- Productos -->
-        </div>
-    </div>
-
-    <!-- Banner Flotante Inferior -->
-    <div class="floating-cart-wrapper" id="floatingCartWrapper">
-        <div class="floating-cart" onclick="toggleCartModal()">
-            <div class="cart-qty"><span id="cartQty">0</span></div>
-            <div class="cart-text">Ver canasta</div>
-            <div class="cart-total-price" id="cartTotalBtn">$0.00</div>
-        </div>
-    </div>
-
-    <!-- Modal de Canasta (Bottom Sheet) -->
-    <div class="cart-modal-overlay" id="cartOverlay" onclick="toggleCartModal()"></div>
-    <div class="cart-modal" id="cartModal">
-        <div class="modal-header">
-            <h2>Tu Pedido</h2>
-            <button class="close-modal" onclick="toggleCartModal()">✕</button>
-        </div>
-        <div class="modal-body" id="cartItems">
-            <!-- Items del carrito -->
-        </div>
-        <button class="checkout-btn" id="checkoutBtn">Ir a pagar - $0.00</button>
-    </div>
-
-<script>
-const API = 'https://routicket.com/tienda/get_tienda.php?id_tienda=15510';
-
-const productsContainer = document.getElementById('products');
-const floatingCartWrapper = document.getElementById('floatingCartWrapper');
-const cartQtyEl = document.getElementById('cartQty');
-const cartTotalBtn = document.getElementById('cartTotalBtn');
-const cartItemsContainer = document.getElementById('cartItems');
-const checkoutBtn = document.getElementById('checkoutBtn');
-const cartModal = document.getElementById('cartModal');
-const cartOverlay = document.getElementById('cartOverlay');
-
-let cart = [];
-
-function toggleCartModal() {
-    cartModal.classList.toggle('active');
-    cartOverlay.classList.toggle('active');
+:root{
+    --lila:#b57cff;
+    --lila-dark:#8d4dff;
+    --black:#111111;
+    --white:#ffffff;
+    --gray:#f5f5f7;
 }
 
-async function loadStore() {
-    try {
-        const res = await fetch(API);
-        const data = await res.json();
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
 
-        if(data.data && data.data.titulo) {
-            document.getElementById('storeName').textContent = data.data.titulo;
-        }
+html{
+    scroll-behavior:smooth;
+}
 
-        renderProducts(data.data.productos);
-    } catch (error) {
-        console.error("Error:", error);
-        productsContainer.innerHTML = '<p>Error al cargar el menú.</p>';
+body{
+    background:var(--gray);
+    color:var(--black);
+    overflow-x:hidden;
+}
+
+img{
+    width:100%;
+    display:block;
+}
+
+button{
+    border:none;
+    cursor:pointer;
+    transition:.3s;
+    font-family:'Poppins',sans-serif;
+}
+
+.container{
+    width:92%;
+    max-width:1300px;
+    margin:auto;
+}
+
+/* HEADER */
+
+header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    backdrop-filter:blur(10px);
+    background:rgba(17,17,17,.92);
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 0;
+    gap:20px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    color:white;
+}
+
+.logo img{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    object-fit:cover;
+    border:3px solid var(--lila);
+}
+
+.logo h1{
+    font-size:1.1rem;
+    font-weight:700;
+}
+
+.logo p{
+    font-size:.85rem;
+    color:#ccc;
+}
+
+.cart-btn{
+    background:linear-gradient(135deg,var(--lila),var(--lila-dark));
+    color:white;
+    padding:12px 22px;
+    border-radius:999px;
+    font-weight:600;
+    box-shadow:0 10px 20px rgba(181,124,255,.35);
+}
+
+.cart-btn:hover{
+    transform:translateY(-2px);
+}
+
+/* HERO */
+
+.hero{
+    min-height:85vh;
+    position:relative;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:40px 20px;
+
+    background:
+    linear-gradient(
+        rgba(15,15,15,.65),
+        rgba(15,15,15,.70)
+    ),
+    url('https://i.imgur.com/fJlzFVF.jpeg');
+
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+}
+
+.hero-content{
+    position:relative;
+    z-index:2;
+    max-width:750px;
+    color:white;
+}
+
+.hero h2{
+    font-size:4rem;
+    line-height:1.05;
+    margin-bottom:20px;
+    font-weight:700;
+}
+
+.hero p{
+    font-size:1.1rem;
+    color:#eee;
+    line-height:1.7;
+    margin-bottom:35px;
+}
+
+.hero-btn{
+    display:inline-block;
+    background:white;
+    color:var(--black);
+    padding:16px 32px;
+    border-radius:999px;
+    text-decoration:none;
+    font-weight:700;
+    transition:.3s;
+}
+
+.hero-btn:hover{
+    transform:translateY(-3px);
+}
+
+/* CATEGORIAS */
+
+.categories{
+    padding:40px 0 20px;
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    flex-wrap:wrap;
+}
+
+.category-btn{
+    background:white;
+    padding:12px 24px;
+    border-radius:999px;
+    font-weight:600;
+    color:#444;
+    box-shadow:0 5px 15px rgba(0,0,0,.05);
+}
+
+.category-btn.active,
+.category-btn:hover{
+    background:linear-gradient(135deg,var(--lila),var(--lila-dark));
+    color:white;
+}
+
+/* TITULO */
+
+.section-title{
+    text-align:center;
+    margin:30px 0 40px;
+}
+
+.section-title h2{
+    font-size:2.6rem;
+    margin-bottom:10px;
+}
+
+.section-title p{
+    color:#666;
+}
+
+/* PRODUCTOS */
+
+.products{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+    padding-bottom:70px;
+}
+
+.card{
+    background:white;
+    border-radius:28px;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,.06);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.card img{
+    height:220px;
+    object-fit:cover;
+}
+
+.card-content{
+    padding:18px;
+}
+
+.card h3{
+    font-size:1rem;
+    margin-bottom:8px;
+    font-weight:700;
+}
+
+.card p{
+    font-size:.88rem;
+    color:#666;
+    line-height:1.5;
+    margin-bottom:14px;
+}
+
+.option{
+    margin-bottom:12px;
+}
+
+.option label{
+    display:block;
+    margin-bottom:5px;
+    font-size:.85rem;
+    font-weight:600;
+}
+
+.option select{
+    width:100%;
+    padding:10px 12px;
+    border-radius:14px;
+    border:1px solid #ddd;
+    background:white;
+    outline:none;
+}
+
+.checkbox{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:15px;
+    font-size:.85rem;
+}
+
+.price-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.price{
+    font-size:1.3rem;
+    font-weight:700;
+    color:var(--lila-dark);
+}
+
+.add-btn{
+    background:linear-gradient(135deg,var(--lila),var(--lila-dark));
+    color:white;
+    padding:12px 18px;
+    border-radius:999px;
+    font-size:.9rem;
+    font-weight:600;
+}
+
+.add-btn:hover{
+    transform:scale(1.03);
+}
+
+/* CARRITO */
+
+.cart{
+    position:fixed;
+    top:0;
+    right:-420px;
+    width:380px;
+    max-width:100%;
+    height:100vh;
+    background:white;
+    z-index:2000;
+    box-shadow:-10px 0 40px rgba(0,0,0,.15);
+    display:flex;
+    flex-direction:column;
+    transition:.4s;
+}
+
+.cart.active{
+    right:0;
+}
+
+.cart-header{
+    background:linear-gradient(135deg,var(--lila),var(--lila-dark));
+    color:white;
+    padding:24px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.cart-header button{
+    background:none;
+    color:white;
+    font-size:1.5rem;
+}
+
+.cart-items{
+    flex:1;
+    overflow:auto;
+    padding:20px;
+    background:#fafafa;
+}
+
+.cart-item{
+    background:white;
+    border-radius:20px;
+    padding:16px;
+    margin-bottom:14px;
+    box-shadow:0 5px 15px rgba(0,0,0,.05);
+}
+
+.cart-item strong{
+    display:block;
+    margin-bottom:5px;
+}
+
+.cart-footer{
+    padding:22px;
+    border-top:1px solid #eee;
+}
+
+.total{
+    display:flex;
+    justify-content:space-between;
+    font-size:1.2rem;
+    font-weight:700;
+    margin-bottom:18px;
+}
+
+.checkout{
+    width:100%;
+    background:linear-gradient(135deg,var(--lila),var(--lila-dark));
+    color:white;
+    padding:15px;
+    border-radius:999px;
+    font-size:1rem;
+    font-weight:700;
+}
+
+.checkout:hover{
+    transform:translateY(-2px);
+}
+
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    opacity:0;
+    visibility:hidden;
+    transition:.3s;
+    z-index:1500;
+}
+
+.overlay.active{
+    opacity:1;
+    visibility:visible;
+}
+
+footer{
+    background:#111;
+    color:white;
+    text-align:center;
+    padding:28px 20px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+    .hero{
+        min-height:70vh;
+    }
+
+    .hero h2{
+        font-size:2.4rem;
+    }
+
+    .hero p{
+        font-size:.95rem;
+    }
+
+    .products{
+        grid-template-columns:repeat(2,1fr);
+        gap:14px;
+    }
+
+    .card img{
+        height:160px;
+    }
+
+    .card-content{
+        padding:14px;
+    }
+
+    .card h3{
+        font-size:.9rem;
+    }
+
+    .card p{
+        font-size:.78rem;
+    }
+
+    .price{
+        font-size:1rem;
+    }
+
+    .add-btn{
+        padding:10px 14px;
+        font-size:.8rem;
+    }
+
+    .nav{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .cart-btn{
+        width:100%;
     }
 }
 
-function renderProducts(items) {
-    productsContainer.innerHTML = '';
+</style>
+</head>
 
-    if(!items || items.length === 0) return;
+<body>
 
-    items.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
+<header>
 
-        card.innerHTML = `
-            <div class="product-info">
-                <h3>${item.name}</h3>
-                <p>${item.description || 'Preparada con los ingredientes más frescos de la zona.'}</p>
-                
-                <div class="options">
-                    <select class="size">
-                        <option value="0">Individual</option>
-                        <option value="40">Mediana (+$40)</option>
-                        <option value="80">Familiar (+$80)</option>
-                    </select>
-                    <label>
-                        <input type="checkbox" class="border">
-                        Orilla de queso (+$35)
-                    </label>
+    <div class="container nav">
+
+        <div class="logo">
+
+            <img id="logo" src="" alt="Logo">
+
+            <div>
+                <h1 id="storeName">Noely Creaciones</h1>
+                <p id="storeDesc">Belleza & Accesorios</p>
+            </div>
+
+        </div>
+
+        <button class="cart-btn" id="openCart">
+            🛍️ Carrito (<span id="count">0</span>)
+        </button>
+
+    </div>
+
+</header>
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h2>
+            Accesorios, estilo y detalles únicos ✨
+        </h2>
+
+        <p>
+            Descubre accesorios, maquillaje y productos especiales con un diseño elegante y femenino.
+        </p>
+
+        <a href="#menu" class="hero-btn">
+            Ver catálogo
+        </a>
+
+    </div>
+
+</section>
+
+<section class="container categories">
+
+    <button class="category-btn active" data-category="all">
+        Todo
+    </button>
+
+    <button class="category-btn" data-category="Manualidades">
+        Manualidades
+    </button>
+
+    <button class="category-btn" data-category="Accesorios">
+        Accesorios
+    </button>
+
+    <button class="category-btn" data-category="Maquillaje">
+        Maquillaje
+    </button>
+
+    <button class="category-btn" data-category="Bisutería">
+        Bisutería
+    </button>
+
+    <button class="category-btn" data-category="Regalos">
+        Regalos
+    </button>
+
+    <button class="category-btn" data-category="Skincare">
+        Skincare
+    </button>
+
+</section>
+
+<section class="container" id="menu">
+
+    <div class="section-title">
+        <h2>Nuestra Colección</h2>
+        <p>Productos especiales seleccionados para ti</p>
+    </div>
+
+    <div class="products" id="products"></div>
+
+</section>
+
+<!-- NUEVOS PRODUCTOS -->
+
+<section class="container">
+
+    <div class="section-title">
+        <h2>Nuevos Productos ✨</h2>
+        <p>Diseños exclusivos artesanales</p>
+    </div>
+
+    <div class="products">
+
+        <!-- OJO COSMICO TRIPLE -->
+
+        <div class="card">
+
+            <img src="https://i.imgur.com/fJlzFVF.jpeg" alt="Ojo Cósmico Triple">
+
+            <div class="card-content">
+
+                <h3>Ojo Cósmico Triple</h3>
+
+                <p>
+                    Diseño artesanal exclusivo con acabado elegante y estilo místico.
+                </p>
+
+                <div class="price-row">
+
+                    <div class="price">
+                        $129
+                    </div>
+
+                    <button class="add-btn"
+                    onclick="agregarProducto('Ojo Cósmico Triple',129)">
+                        Agregar
+                    </button>
+
                 </div>
 
-                <div class="product-price">$<span class="price-val">${parseFloat(item.price).toFixed(2)}</span></div>
             </div>
-            <div class="product-image-container">
-                <img src="${item.image || 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=300&q=80'}" alt="${item.name}">
-                <button class="add-btn">Agregar</button>
+
+        </div>
+
+        <!-- OJO COSMICO TRIANGULO -->
+
+        <div class="card">
+
+            <img src="https://i.imgur.com/fJlzFVF.jpeg" alt="Ojo Cósmico Triángulo">
+
+            <div class="card-content">
+
+                <h3>Ojo Cósmico Triángulo</h3>
+
+                <p>
+                    Pieza decorativa moderna con detalles únicos y energía cósmica.
+                </p>
+
+                <div class="price-row">
+
+                    <div class="price">
+                        $129
+                    </div>
+
+                    <button class="add-btn"
+                    onclick="agregarProducto('Ojo Cósmico Triángulo',129)">
+                        Agregar
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<aside class="cart" id="cart">
+
+    <div class="cart-header">
+        <h2>Tu Pedido</h2>
+        <button id="closeCart">✕</button>
+    </div>
+
+    <div class="cart-items" id="cartItems"></div>
+
+    <div class="cart-footer">
+
+        <div class="total">
+            <span>Total</span>
+            <span id="total">$0 MXN</span>
+        </div>
+
+        <button class="checkout" id="checkoutBtn">
+            Finalizar Pedido
+        </button>
+
+    </div>
+
+</aside>
+
+<div class="overlay" id="overlay"></div>
+
+<footer>
+    © 2026 Noely Creaciones
+</footer>
+
+<script>
+
+const API = 'https://routicket.com/tienda/get_tienda.php?id_tienda=15517';
+
+const WHATSAPP_NUMBER = '529842665680';
+
+const productsEl = document.getElementById('products');
+const cartItems = document.getElementById('cartItems');
+const totalEl = document.getElementById('total');
+const countEl = document.getElementById('count');
+
+const cart = document.getElementById('cart');
+const overlay = document.getElementById('overlay');
+const checkoutBtn = document.getElementById('checkoutBtn');
+
+let products = [];
+let carrito = [];
+
+/* CARGAR TIENDA */
+
+async function loadStore(){
+
+    try{
+
+        const res = await fetch(API);
+
+        const data = await res.json();
+
+        const tienda = data.data;
+
+        document.getElementById('storeName').textContent =
+        tienda.titulo || 'Noely Creaciones';
+
+        document.getElementById('storeDesc').textContent =
+        tienda.descripcion || 'Tienda Online';
+
+        document.getElementById('logo').src =
+        tienda.foto || '';
+
+        products = tienda.productos || [];
+
+        renderProducts(products);
+
+    }catch(error){
+
+        console.error(error);
+
+        productsEl.innerHTML = `
+            <p style="padding:40px;text-align:center;width:100%;">
+                No se pudieron cargar los productos.
+            </p>
+        `;
+    }
+}
+
+/* PRODUCTOS API */
+
+function renderProducts(items){
+
+    productsEl.innerHTML = '';
+
+    items.forEach(item=>{
+
+        const card = document.createElement('div');
+
+        card.className = 'card';
+
+        card.innerHTML = `
+            <img src="${item.image}" alt="${item.name}">
+
+            <div class="card-content">
+
+                <h3>${item.name}</h3>
+
+                <p>
+                    ${item.description || 'Producto exclusivo'}
+                </p>
+
+                <div class="option">
+
+                    <label>Presentación</label>
+
+                    <select class="size">
+                        <option value="0">Normal</option>
+                        <option value="50">Premium (+$50)</option>
+                        <option value="100">Luxury (+$100)</option>
+                    </select>
+
+                </div>
+
+                <label class="checkbox">
+                    <input type="checkbox" class="gift">
+                    Empaque regalo (+$35)
+                </label>
+
+                <div class="price-row">
+
+                    <div class="price">
+                        $<span>${item.price}</span>
+                    </div>
+
+                    <button class="add-btn">
+                        Agregar
+                    </button>
+
+                </div>
+
             </div>
         `;
 
-        const sizeSelect = card.querySelector('.size');
-        const borderCheck = card.querySelector('.border');
-        const priceDisplay = card.querySelector('.price-val');
+        const size = card.querySelector('.size');
+        const gift = card.querySelector('.gift');
+        const price = card.querySelector('.price span');
         const addBtn = card.querySelector('.add-btn');
 
-        function calcPrice() {
-            let total = Number(item.price) + Number(sizeSelect.value);
-            if(borderCheck.checked) total += 35;
-            priceDisplay.textContent = total.toFixed(2);
+        function updatePrice(){
+
+            let total = Number(item.price);
+
+            total += Number(size.value);
+
+            if(gift.checked){
+                total += 35;
+            }
+
+            price.textContent = total;
+
             return total;
         }
 
-        sizeSelect.addEventListener('change', calcPrice);
-        borderCheck.addEventListener('change', calcPrice);
+        size.addEventListener('change', updatePrice);
+        gift.addEventListener('change', updatePrice);
 
-        addBtn.addEventListener('click', () => {
-            const finalPrice = calcPrice();
-            
-            // Efecto visual en el botón
-            const originalText = addBtn.textContent;
-            addBtn.textContent = '✓';
-            addBtn.style.color = 'var(--green-success)';
-            setTimeout(() => {
-                addBtn.textContent = originalText;
-                addBtn.style.color = 'var(--rappi-orange)';
-            }, 800);
+        addBtn.addEventListener('click', ()=>{
 
-            cart.push({
-                name: item.name,
-                price: finalPrice,
-                details: `${sizeSelect.options[sizeSelect.selectedIndex].text}${borderCheck.checked ? ' (c/ Orilla)' : ''}`
+            carrito.push({
+                name:item.name,
+                price:updatePrice()
             });
 
             updateCart();
+            openCart();
         });
 
-        productsContainer.appendChild(card);
+        productsEl.appendChild(card);
     });
 }
 
-function updateCart() {
+/* AGREGAR PRODUCTOS MANUALES */
+
+function agregarProducto(nombre,precio){
+
+    carrito.push({
+        name:nombre,
+        price:precio
+    });
+
+    updateCart();
+    openCart();
+}
+
+/* ACTUALIZAR CARRITO */
+
+function updateCart(){
+
+    cartItems.innerHTML = '';
+
     let total = 0;
-    cartItemsContainer.innerHTML = '';
 
-    if (cart.length > 0) {
-        floatingCartWrapper.classList.add('visible');
-    } else {
-        floatingCartWrapper.classList.remove('visible');
-    }
+    carrito.forEach(item=>{
 
-    cart.forEach(item => {
         total += item.price;
-        cartItemsContainer.innerHTML += `
+
+        cartItems.innerHTML += `
             <div class="cart-item">
-                <div class="item-details">
-                    <h4>1x ${item.name}</h4>
-                    <span>${item.details}</span>
-                </div>
-                <div class="item-price">$${item.price.toFixed(2)}</div>
+                <strong>${item.name}</strong>
+                <p>$${item.price} MXN</p>
             </div>
         `;
     });
 
-    const formatTotal = `$${total.toFixed(2)}`;
-    
-    // Actualizar banner flotante
-    cartQtyEl.textContent = cart.length;
-    cartTotalBtn.textContent = formatTotal;
-    
-    // Actualizar modal
-    checkoutBtn.textContent = `Ir a pagar - ${formatTotal}`;
+    totalEl.textContent = '$' + total + ' MXN';
+    countEl.textContent = carrito.length;
 }
 
+/* FILTROS */
+
+document.querySelectorAll('.category-btn').forEach(btn=>{
+
+    btn.addEventListener('click', ()=>{
+
+        document.querySelectorAll('.category-btn')
+        .forEach(b=>b.classList.remove('active'));
+
+        btn.classList.add('active');
+
+        const category = btn.dataset.category;
+
+        if(category === 'all'){
+
+            renderProducts(products);
+
+        }else{
+
+            renderProducts(
+                products.filter(
+                    p => p.category_name === category
+                )
+            );
+        }
+    });
+});
+
+/* CARRITO */
+
+function openCart(){
+
+    cart.classList.add('active');
+    overlay.classList.add('active');
+}
+
+function closeCart(){
+
+    cart.classList.remove('active');
+    overlay.classList.remove('active');
+}
+
+/* WHATSAPP */
+
+checkoutBtn.addEventListener('click', ()=>{
+
+    if(carrito.length === 0){
+
+        alert('Tu carrito está vacío');
+        return;
+    }
+
+    let mensaje =
+    '✨ *Nuevo Pedido - Noely Creaciones* ✨%0A%0A';
+
+    let total = 0;
+
+    carrito.forEach((item,index)=>{
+
+        mensaje +=
+        `${index + 1}. ${item.name} - $${item.price} MXN%0A`;
+
+        total += item.price;
+    });
+
+    mensaje += `%0A🛍️ *Total:* $${total} MXN`;
+
+    const url =
+    `https://wa.me/${WHATSAPP_NUMBER}?text=${mensaje}`;
+
+    window.open(url,'_blank');
+});
+
+/* EVENTOS */
+
+document.getElementById('openCart')
+.addEventListener('click', openCart);
+
+document.getElementById('closeCart')
+.addEventListener('click', closeCart);
+
+overlay.addEventListener('click', closeCart);
+
+/* INICIAR */
+
 loadStore();
+
 </script>
+
+</body>
+</html>
+```
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Noely Creaciones</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --lila:#b57cff;
+    --lila-dark:#8d4dff;
+    --black:#111111;
+    --white:#ffffff;
+    --gray:#f5f5f7;
+    --shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:var(--gray);
+    color:var(--black);
+    overflow-x:hidden;
+}
+
+img{
+    width:100%;
+    display:block;
+}
+
+button{
+    border:none;
+    cursor:pointer;
+    transition:.3s;
+    font-family:'Poppins',sans-serif;
+}
+
+.container{
+    width:92%;
+    max-width:1300px;
+    margin:auto;
+}
+
+/* HEADER */
+
+header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    backdrop-filter:blur(10px);
+    background:rgba(17,17,17,.92);
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 0;
+    gap:20px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    color:white;
+}
+
+.logo img{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    object-fit:cover;
+    border:3px solid var(--lila);
+}
+
+.logo h1{
+    font-size:1.1rem;
+    font-weight:700;
+}
+
+.logo p{
+    font-size:.85rem;
+    color:#ccc;
+}
+
+.cart-btn{
+    background:linear-gradient(135deg,var(--lila),var(--lila-dark));
+    color:white;
+    padding:12px 22px;
+    border-radius:999px;
+    font-weight:600;
+    box-shadow:0 10px 20px rgba(181,124,255,.35);
+}
+
+.cart-btn:hover{
+    transform:translateY(-2px);
+}
+
+/* HERO */
+
+.hero{
+    min-height:85vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:40px 20px;
+
+    background:
+    linear-gradient(
+        rgba(15,15,15,.65),
+        rgba(15,15,15,.70)
+    ),
+    url('https://i.imgur.com/fJlzFVF.jpeg');
+
+    background-size:cover;
+    background-position:center;
+}
+
+.hero-content{
+    max-width:750px;
+    color:white;
+}
+
+.hero h2{
+    font-size:4rem;
+    line-height:1.05;
+    margin-bottom:20px;
+    font-weight:700;
+}
+
+.hero p{
+    font-size:1.1rem;
+    color:#eee;
+    line-height:1.7;
+    margin-bottom:35px;
+}
+
+.hero-btn{
+    display:inline-block;
+    background:white;
+    color:var(--black);
+    padding:16px 32px;
+    border-radius:999px;
+    text-decoration:none;
+    font-weight:700;
+    transition:.3s;
+}
+
+.hero-btn:hover{
+    transform:translateY(-3px);
+}
+
+/* CATEGORIAS */
+
+.categories{
+    padding:40px 0 20px;
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    flex-wrap:wrap;
+}
+
+.category-btn{
+    background:white;
+    padding:12px 24px;
+    border-radius:999px;
+    font-weight:600;
+    color:#444;
+    box-shadow:0 5px 15px rgba(0,0,0,.05);
+}
+
+.category-btn.active,
+.category-btn:hover{
+    background:linear-gradient(135deg,var(--lila),var(--lila-dark));
+    color:white;
+}
+
+/* TITULOS */
+
+.section-title{
+    text-align:center;
+    margin:40px 0;
+}
+
+.section-title h2{
+    font-size:2.5rem;
+    margin-bottom:10px;
+}
+
+.section-title p{
+    color:#666;
+}
+
+/* PRODUCTOS */
+
+.products{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:22px;
+    padding-bottom:60px;
+}
+
+.card{
+    background:white;
+    border-radius:28px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+    transition:.35s;
+    position:relative;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+}
+
+.card img{
+    height:260px;
+    object-fit:cover;
+}
+
+.card-content{
+    padding:18px;
+}
+
+.badge{
+    position:absolute;
+    top:14px;
+    left:14px;
+    background:linear-gradient(135deg,var(--lila),var(--lila-dark));
+    color:white;
+    padding:8px 14px;
+    border-radius:999px;
+    font-size:.75rem;
+    font-weight:600;
+}
+
+.card h3{
+    font-size:1.05rem;
+    margin-bottom:8px;
+}
+
+.card p{
+    font-size:.88rem;
+    color:#666;
+    line-height:1.5;
+    margin-bottom:15px;
+}
+
+.price-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.price{
+    font-size:1.3rem;
+    font-weight:700;
+    color:var(--lila-dark);
+}
+
+.add-btn{
+    background:linear-gradient(135deg,var(--lila),var(--lila-dark));
+    color:white;
+    padding:12px 18px;
+    border-radius:999px;
+    font-size:.9rem;
+    font-weight:600;
+}
+
+.add-btn:hover{
+    transform:scale(1.05);
+}
+
+/* CARRITO */
+
+.cart{
+    position:fixed;
+    top:0;
+    right:-420px;
+    width:390px;
+    max-width:100%;
+    height:100vh;
+    background:white;
+    z-index:2000;
+    box-shadow:-10px 0 40px rgba(0,0,0,.15);
+    display:flex;
+    flex-direction:column;
+    transition:.4s;
+}
+
+.cart.active{
+    right:0;
+}
+
+.cart-header{
+    background:linear-gradient(135deg,var(--lila),var(--lila-dark));
+    color:white;
+    padding:24px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.cart-header button{
+    background:none;
+    color:white;
+    font-size:1.6rem;
+}
+
+.cart-items{
+    flex:1;
+    overflow:auto;
+    padding:20px;
+    background:#fafafa;
+}
+
+.cart-item{
+    background:white;
+    border-radius:18px;
+    padding:16px;
+    margin-bottom:14px;
+    box-shadow:0 5px 15px rgba(0,0,0,.05);
+}
+
+.cart-item-top{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.remove-btn{
+    background:#ff4d6d;
+    color:white;
+    border-radius:50%;
+    width:28px;
+    height:28px;
+    font-size:.9rem;
+}
+
+.cart-footer{
+    padding:22px;
+    border-top:1px solid #eee;
+}
+
+.total{
+    display:flex;
+    justify-content:space-between;
+    font-size:1.2rem;
+    font-weight:700;
+    margin-bottom:18px;
+}
+
+.checkout{
+    width:100%;
+    background:linear-gradient(135deg,var(--lila),var(--lila-dark));
+    color:white;
+    padding:16px;
+    border-radius:999px;
+    font-size:1rem;
+    font-weight:700;
+}
+
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    opacity:0;
+    visibility:hidden;
+    transition:.3s;
+    z-index:1500;
+}
+
+.overlay.active{
+    opacity:1;
+    visibility:visible;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    bottom:30px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#111;
+    color:white;
+    padding:14px 24px;
+    border-radius:999px;
+    z-index:5000;
+    opacity:0;
+    pointer-events:none;
+    transition:.3s;
+}
+
+.toast.show{
+    opacity:1;
+}
+
+/* FOOTER */
+
+footer{
+    background:#111;
+    color:white;
+    text-align:center;
+    padding:28px 20px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+    .hero h2{
+        font-size:2.4rem;
+    }
+
+    .hero p{
+        font-size:.95rem;
+    }
+
+    .nav{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .cart-btn{
+        width:100%;
+    }
+
+    .products{
+        grid-template-columns:repeat(2,1fr);
+        gap:14px;
+    }
+
+    .card img{
+        height:160px;
+    }
+
+    .card-content{
+        padding:14px;
+    }
+
+    .price{
+        font-size:1rem;
+    }
+
+    .add-btn{
+        padding:10px 14px;
+        font-size:.8rem;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="container nav">
+
+<div class="logo">
+
+<img id="logo" src="https://i.imgur.com/fJlzFVF.jpeg" alt="Logo">
+
+<div>
+<h1>Noely Creaciones</h1>
+<p>Accesorios & Manualidades</p>
+</div>
+
+</div>
+
+<button class="cart-btn" id="openCart">
+🛍️ Carrito (<span id="count">0</span>)
+</button>
+
+</div>
+
+</header>
+
+<section class="hero">
+
+<div class="hero-content">
+
+<h2>
+Colección Ojo Cósmico ✨
+</h2>
+
+<p>
+Diseños artesanales exclusivos inspirados en energía, protección y estilo cósmico.
+</p>
+
+<a href="#coleccion" class="hero-btn">
+Ver colección
+</a>
+
+</div>
+
+</section>
+
+<section class="container categories">
+
+<button class="category-btn active">
+Colección Ojo Cósmico
+</button>
+
+</section>
+
+<section class="container" id="coleccion">
+
+<div class="section-title">
+<h2>Colección Completa</h2>
+<p>Todas las piezas pertenecen a la misma colección exclusiva</p>
+</div>
+
+<div class="products">
+
+<!-- PRODUCTO 1 -->
+
+<div class="card">
+
+<div class="badge">
+Nueva Colección
+</div>
+
+<img src="https://i.imgur.com/fJlzFVF.jpeg" alt="Ojo Cósmico Triple">
+
+<div class="card-content">
+
+<h3>Ojo Cósmico Triple</h3>
+
+<p>
+Diseño artesanal elegante con detalles místicos y acabado premium.
+</p>
+
+<div class="price-row">
+
+<div class="price">
+$129
+</div>
+
+<button class="add-btn"
+onclick="agregarProducto('Ojo Cósmico Triple',129)">
+Agregar
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- PRODUCTO 2 -->
+
+<div class="card">
+
+<div class="badge">
+Nueva Colección
+</div>
+
+<img src="https://i.imgur.com/fJlzFVF.jpeg" alt="Ojo Cósmico Triángulo">
+
+<div class="card-content">
+
+<h3>Ojo Cósmico Triángulo</h3>
+
+<p>
+Diseño geométrico moderno inspirado en protección y energía.
+</p>
+
+<div class="price-row">
+
+<div class="price">
+$129
+</div>
+
+<button class="add-btn"
+onclick="agregarProducto('Ojo Cósmico Triángulo',129)">
+Agregar
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- PRODUCTO 3 -->
+
+<div class="card">
+
+<div class="badge">
+Nueva Colección
+</div>
+
+<img src="https://i.imgur.com/fJlzFVF.jpeg" alt="Ojo Cósmico Lunar">
+
+<div class="card-content">
+
+<h3>Ojo Cósmico Lunar</h3>
+
+<p>
+Pieza artística con inspiración celestial y acabado artesanal.
+</p>
+
+<div class="price-row">
+
+<div class="price">
+$129
+</div>
+
+<button class="add-btn"
+onclick="agregarProducto('Ojo Cósmico Lunar',129)">
+Agregar
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- CARRITO -->
+
+<aside class="cart" id="cart">
+
+<div class="cart-header">
+
+<h2>Tu Pedido</h2>
+
+<button id="closeCart">
+✕
+</button>
+
+</div>
+
+<div class="cart-items" id="cartItems"></div>
+
+<div class="cart-footer">
+
+<div class="total">
+<span>Total</span>
+<span id="total">$0 MXN</span>
+</div>
+
+<button class="checkout" id="checkoutBtn">
+Finalizar Pedido
+</button>
+
+</div>
+
+</aside>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="toast" id="toast">
+Producto agregado al carrito ✨
+</div>
+
+<footer>
+© 2026 Noely Creaciones
+</footer>
+
+<script>
+
+const WHATSAPP_NUMBER = '529842665680';
+
+const cart = document.getElementById('cart');
+const overlay = document.getElementById('overlay');
+const cartItems = document.getElementById('cartItems');
+const totalEl = document.getElementById('total');
+const countEl = document.getElementById('count');
+const toast = document.getElementById('toast');
+
+let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+
+/* MOSTRAR TOAST */
+
+function showToast(){
+
+    toast.classList.add('show');
+
+    setTimeout(()=>{
+        toast.classList.remove('show');
+    },2000);
+}
+
+/* ABRIR CARRITO */
+
+function openCart(){
+
+    cart.classList.add('active');
+    overlay.classList.add('active');
+}
+
+/* CERRAR CARRITO */
+
+function closeCart(){
+
+    cart.classList.remove('active');
+    overlay.classList.remove('active');
+}
+
+/* AGREGAR PRODUCTO */
+
+function agregarProducto(nombre,precio){
+
+    carrito.push({
+        name:nombre,
+        price:precio
+    });
+
+    guardarCarrito();
+
+    updateCart();
+
+    openCart();
+
+    showToast();
+}
+
+/* ELIMINAR PRODUCTO */
+
+function eliminarProducto(index){
+
+    carrito.splice(index,1);
+
+    guardarCarrito();
+
+    updateCart();
+}
+
+/* GUARDAR */
+
+function guardarCarrito(){
+
+    localStorage.setItem(
+        'carrito',
+        JSON.stringify(carrito)
+    );
+}
+
+/* ACTUALIZAR */
+
+function updateCart(){
+
+    cartItems.innerHTML = '';
+
+    let total = 0;
+
+    carrito.forEach((item,index)=>{
+
+        total += item.price;
+
+        cartItems.innerHTML += `
+        <div class="cart-item">
+
+            <div class="cart-item-top">
+
+                <div>
+                    <strong>${item.name}</strong>
+                    <p>$${item.price} MXN</p>
+                </div>
+
+                <button class="remove-btn"
+                onclick="eliminarProducto(${index})">
+                ✕
+                </button>
+
+            </div>
+
+        </div>
+        `;
+    });
+
+    totalEl.textContent = '$' + total + ' MXN';
+
+    countEl.textContent = carrito.length;
+}
+
+/* WHATSAPP */
+
+document.getElementById('checkoutBtn')
+.addEventListener('click',()=>{
+
+    if(carrito.length === 0){
+
+        alert('Tu carrito está vacío');
+        return;
+    }
+
+    let mensaje =
+    '✨ *Nuevo Pedido - Noely Creaciones* ✨%0A%0A';
+
+    let total = 0;
+
+    carrito.forEach((item,index)=>{
+
+        mensaje +=
+        `${index+1}. ${item.name} - $${item.price} MXN%0A`;
+
+        total += item.price;
+    });
+
+    mensaje += `%0A🛍️ *Total:* $${total} MXN`;
+
+    const url =
+    `https://wa.me/${WHATSAPP_NUMBER}?text=${mensaje}`;
+
+    window.open(url,'_blank');
+});
+
+/* EVENTOS */
+
+document.getElementById('openCart')
+.addEventListener('click',openCart);
+
+document.getElementById('closeCart')
+.addEventListener('click',closeCart);
+
+overlay.addEventListener('click',closeCart);
+
+/* INICIAR */
+
+updateCart();
+
+</script>
+
 </body>
 </html>
