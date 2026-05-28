@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Store | Routicket</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #F7F7F7;
+            --surface: #FFFFFF;
+            --text-main: #000000;
+            --text-muted: #5E5E5E;
+            --border-color: #E2E2E2;
+            --accent: #06C167; /* Verde estilo Uber Eats */
+            --accent-hover: #04A155;
+            --danger: #E23636;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+        }
+
+        /* NAVBAR */
+        nav {
+            background-color: var(--surface);
+            padding: 16px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 40;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .cart-trigger {
+            background: var(--text-main);
+            color: var(--surface);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 99px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.2s;
+        }
+
+        .cart-trigger:hover {
+            opacity: 0.8;
+        }
+
+        .cart-badge {
+            background: var(--accent);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        /* STORE HEADER */
+        .store-header {
+            background: var(--surface);
+            padding: 40px 5%;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .store-header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+
+        .store-meta {
+            color: var(--text-muted);
+            font-size: 14px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .store-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .rating {
+            color: var(--text-main);
+            font-weight: 600;
+            background: #EEEEEE;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        /* LAYOUT PRODUCTOS */
+        .main-content {
+            padding: 0 5% 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        /* CARD MINIMALISTA */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: 0px; /* Sin bordes redondeados para un look más brutalista/limpio */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.2s;
+        }
+
+        .card:hover {
+            border-color: var(--text-main);
+        }
+
+        .card-img-wrapper {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover .card-img-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .card-desc {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        /* CONTROLES DEL PRODUCTO */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .minimal-select {
+            appearance: none;
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            background: var(--surface) url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 16px center;
+            font-size: 14px;
+            color: var(--text-main);
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .minimal-select:focus {
+            outline: none;
+            border-color: var(--text-main);
+        }
+
+        .minimal-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .minimal-checkbox input {
+            accent-color: var(--text-main);
+            width: 16px;
+            height: 16px;
+        }
+
+        /* PRECIO Y BOTÓN AGREGAR */
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .add-btn {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 20px;
+            color: var(--text-main);
+        }
+
+        .add-btn:hover {
+            background: var(--text-main);
+            color: var(--surface);
+            border-color: var(--text-main);
+        }
+
+        .add-btn.success {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        /* CARRITO LATERAL (DRAWER) */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.4);
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s ease;
+            z-index: 100;
+        }
+
+        .drawer-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .drawer {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 420px;
+            height: 100vh;
+            background: var(--surface);
+            z-index: 101;
+            display: flex;
+            flex-direction: column;
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -4px 0 24px rgba(0,0,0,0.1);
+        }
+
+        .drawer.open {
+            right: 0;
+        }
+
+        .drawer-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .drawer-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .drawer-body {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .cart-empty {
+            text-align: center;
+            color: var(--text-muted);
+            margin-top: 40px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding-bottom: 16px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .item-info h4 {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .item-info p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .item-price {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .drawer-footer {
+            padding: 24px;
+            border-top: 1px solid var(--border-color);
+            background: var(--surface);
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .checkout-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        @media (max-width: 600px) {
+            .store-header h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">Routicket<span style="color: var(--accent);">.</span></div>
+        <button class="cart-trigger" onclick="toggleCart()">
+            Mi Orden <span class="cart-badge" id="cartBadge">0</span>
+        </button>
+    </nav>
+
+    <header class="store-header">
+        <h1 id="storeName">Cargando menú...</h1>
+        <div class="store-meta">
+            <span class="rating">★ 4.8</span>
+            <span>•</span>
+            <span>25 - 40 min</span>
+            <span>•</span>
+            <span>Pizzería</span>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="grid" id="productGrid">
+            <!-- Los productos se inyectarán aquí -->
+        </div>
+    </main>
+
+    <!-- OVERLAY Y DRAWER DEL CARRITO -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="toggleCart()"></div>
+    <aside class="drawer" id="cartDrawer">
+        <div class="drawer-header">
+            <h2>Tu Pedido</h2>
+            <button class="close-btn" onclick="toggleCart()">✕</button>
+        </div>
+        <div class="drawer-body" id="cartBody">
+            <div class="cart-empty">Aún no has agregado productos.</div>
+        </div>
+        <div class="drawer-footer">
+            <div class="total-row">
+                <span>Total</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+            <button class="checkout-btn">Ir al pago</button>
+        </div>
+    </aside>
+
+    <script>
+        const API = 'https://routicket.com/tienda/get_tienda.php?id_tienda=15510';
+        
+        const productGrid = document.getElementById('productGrid');
+        const cartBody = document.getElementById('cartBody');
+        const cartTotalEl = document.getElementById('cartTotal');
+        const cartBadge = document.getElementById('cartBadge');
+        const drawer = document.getElementById('cartDrawer');
+        const overlay = document.getElementById('drawerOverlay');
+
+        let cart = [];
+
+        function toggleCart() {
+            drawer.classList.toggle('open');
+            overlay.classList.toggle('open');
+            // Evitar scroll en el body cuando el drawer está abierto
+            document.body.style.overflow = drawer.classList.contains('open') ? 'hidden' : '';
+        }
+
+        async function initStore() {
+            try {
+                const response = await fetch(API);
+                const json = await response.json();
+
+                if (json.data && json.data.titulo) {
+                    document.getElementById('storeName').textContent = json.data.titulo;
+                    document.title = `${json.data.titulo} | Delivery`;
+                }
+
+                renderProducts(json.data.productos);
+            } catch (error) {
+                productGrid.innerHTML = '<p style="color: var(--danger);">Ocurrió un error al cargar el menú. Por favor intenta más tarde.</p>';
+            }
+        }
+
+        function renderProducts(products) {
+            productGrid.innerHTML = '';
+
+            if (!products || products.length === 0) return;
+
+            products.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+
+                // Usamos un placeholder de alta calidad si no hay imagen
+                const imgUrl = item.image || 'https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80';
+
+                card.innerHTML = `
+                    <div class="card-img-wrapper">
+                        <img src="${imgUrl}" alt="${item.name}" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">${item.name}</h3>
+                        <p class="card-desc">${item.description || 'Ingredientes seleccionados de la más alta calidad, horneada a la perfección.'}</p>
+                        
+                        <div class="controls">
+                            <select class="minimal-select size-selector">
+                                <option value="0">Tamaño Individual</option>
+                                <option value="40">Tamaño Mediana (+$40)</option>
+                                <option value="80">Tamaño Familiar (+$80)</option>
+                            </select>
+                            
+                            <label class="minimal-checkbox">
+                                <input type="checkbox" class="border-selector">
+                                Agregar orilla de queso (+$35)
+                            </label>
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="price">$<span class="price-val">${parseFloat(item.price).toFixed(2)}</span></div>
+                            <button class="add-btn" aria-label="Agregar al carrito">＋</button>
+                        </div>
+                    </div>
+                `;
+
+                // Logica de precios dinámica
+                const sizeSel = card.querySelector('.size-selector');
+                const borderChk = card.querySelector('.border-selector');
+                const priceVal = card.querySelector('.price-val');
+                const addBtn = card.querySelector('.add-btn');
+
+                const calculatePrice = () => {
+                    let base = Number(item.price);
+                    let sizeCost = Number(sizeSel.value);
+                    let borderCost = borderChk.checked ? 35 : 0;
+                    let total = base + sizeCost + borderCost;
+                    priceVal.textContent = total.toFixed(2);
+                    return total;
+                };
+
+                sizeSel.addEventListener('change', calculatePrice);
+                borderChk.addEventListener('change', calculatePrice);
+
+                addBtn.addEventListener('click', () => {
+                    const currentPrice = calculatePrice();
+                    const sizeText = sizeSel.options[sizeSel.selectedIndex].text.replace('Tamaño ', '');
+                    const extraText = borderChk.checked ? ' c/ Orilla' : '';
+                    
+                    // Feedback visual en el botón
+                    addBtn.textContent = '✓';
+                    addBtn.classList.add('success');
+                    setTimeout(() => {
+                        addBtn.textContent = '＋';
+                        addBtn.classList.remove('success');
+                    }, 1000);
+
+                    cart.push({
+                        name: item.name,
+                        details: `${sizeText}${extraText}`,
+                        price: currentPrice
+                    });
+
+                    updateCartRender();
+                });
+
+                productGrid.appendChild(card);
+            });
+        }
+
+        function updateCartRender() {
+            cartBody.innerHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                cartBody.innerHTML = '<div class="cart-empty">Aún no has agregado productos.</div>';
+            } else {
+                cart.forEach((item, index) => {
+                    total += item.price;
+                    cartBody.innerHTML += `
+                        <div class="cart-item">
+                            <div class="item-info">
+                                <h4>1x ${item.name}</h4>
+                                <p>${item.details}</p>
+                            </div>
+                            <div class="item-price">$${item.price.toFixed(2)}</div>
+                        </div>
+                    `;
+                });
+            }
+
+            cartTotalEl.textContent = `$${total.toFixed(2)}`;
+            cartBadge.textContent = cart.length;
+            
+            // Animación pop para el badge
+            cartBadge.style.transform = 'scale(1.3)';
+            setTimeout(() => {
+                cartBadge.style.transform = 'scale(1)';
+            }, 150);
+        }
+
+        // Iniciar
+        initStore();
+    </script>
+</body>
+</html>
