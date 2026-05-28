@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizzería Premium | Routicket</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #FF5E00; /* Naranja apetitoso */
+            --primary-hover: #E05200;
+            --secondary: #FFC107;
+            --bg-body: #F4F6F8;
+            --bg-card: #FFFFFF;
+            --text-dark: #1A1D20;
+            --text-light: #6C757D;
+            --border-radius: 16px;
+            --header-bg: rgba(26, 29, 32, 0.95);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* HEADER CON EFECTO GLASS */
+        header {
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        header h1 span {
+            color: var(--primary);
+        }
+
+        .cart-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cart-btn:hover {
+            background: var(--primary-hover);
+            transform: scale(1.05);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            height: 400px;
+            background: url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            margin: 20px 5%;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.8));
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            color: white;
+            padding: 20px;
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #DDD;
+            margin-bottom: 25px;
+        }
+
+        .hero button {
+            background: var(--secondary);
+            color: var(--text-dark);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .hero button:hover {
+            background: #e0a800;
+            transform: translateY(-3px);
+        }
+
+        /* PRODUCTOS */
+        .products-container {
+            padding: 40px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: var(--text-dark);
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-bottom: 4px solid var(--primary);
+        }
+
+        .card-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .card p {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .options-group {
+            background: #F8F9FA;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        select, .checkbox-label {
+            width: 100%;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        select {
+            padding: 10px;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            background: white;
+            outline: none;
+            cursor: pointer;
+        }
+
+        select:focus {
+            border-color: var(--primary);
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .checkbox-label input {
+            accent-color: var(--primary);
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .price {
+            font-size: 24px;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .add {
+            background: var(--text-dark);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .add:hover {
+            background: var(--primary);
+        }
+
+        /* CARRITO LATERAL (SIDEBAR) */
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(3px);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s ease;
+        }
+
+        .cart-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .cart {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background: var(--bg-body);
+            box-shadow: -10px 0 30px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .cart.active {
+            right: 0;
+        }
+
+        .cart-header {
+            padding: 20px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #EEE;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .cart-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .cart-item {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            border-left: 4px solid var(--primary);
+        }
+
+        .cart-item-info h4 {
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .cart-footer {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #EEE;
+        }
+
+        .total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .checkout-btn:hover {
+            background: var(--text-dark);
+        }
+
+        /* RESPONSIVO */
+        @media (max-width: 768px) {
+            .hero {
+                height: 300px;
+                margin: 10px;
+                border-radius: 16px;
+            }
+            .hero h2 {
+                font-size: 2rem;
+            }
+            .products {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1 id="storeName"><span>🍕</span> Tienda</h1>
+    <button class="cart-btn" onclick="toggleCart()">
+        🛒 <span id="cartCount">0</span>
+    </button>
+</header>
+
+<section class="hero">
+    <div class="hero-content">
+        <h2>El auténtico sabor en tu mesa</h2>
+        <p>Pizzas artesanales preparadas con ingredientes frescos</p>
+        <button onclick="document.getElementById('products-section').scrollIntoView({behavior: 'smooth'})">Ver nuestro Menú</button>
+    </div>
+</section>
+
+<section class="products-container" id="products-section">
+    <h2 class="section-title">Nuestras Especialidades</h2>
+    <div class="products" id="products">
+        <!-- Los productos se cargarán aquí vía JS -->
+    </div>
+</section>
+
+<!-- Capa oscura para el carrito -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+<!-- Carrito lateral -->
+<aside class="cart" id="cartSidebar">
+    <div class="cart-header">
+        <h2>Tu Pedido</h2>
+        <button class="close-cart" onclick="toggleCart()">✖</button>
+    </div>
+    <div class="cart-body" id="cartItems">
+        <p style="text-align: center; color: #999; margin-top: 50px;">El carrito está vacío</p>
+    </div>
+    <div class="cart-footer">
+        <div class="total">
+            <span>Total:</span>
+            <span id="total">$0.00 MXN</span>
+        </div>
+        <button class="checkout-btn">Proceder al Pago</button>
+    </div>
+</aside>
+
+<script>
+// Usando la API de Routicket
+const API = 'https://routicket.com/tienda/get_tienda.php?id_tienda=15510';
+
+const productsContainer = document.getElementById('products');
+const cartItemsContainer = document.getElementById('cartItems');
+const totalEl = document.getElementById('total');
+const cartCountEl = document.getElementById('cartCount');
+const cartSidebar = document.getElementById('cartSidebar');
+const cartOverlay = document.getElementById('cartOverlay');
+
+let cart = [];
+
+// Alternar visibilidad del carrito
+function toggleCart() {
+    cartSidebar.classList.toggle('active');
+    cartOverlay.classList.toggle('active');
+}
+
+async function loadStore() {
+    try {
+        const res = await fetch(API);
+        const data = await res.json();
+
+        // Actualizar título de la tienda
+        if(data.data && data.data.titulo) {
+            document.getElementById('storeName').innerHTML = `<span>🍕</span> ${data.data.titulo}`;
+            document.title = `${data.data.titulo} | Routicket`;
+        }
+
+        renderProducts(data.data.productos);
+    } catch (error) {
+        console.error("Error al cargar la tienda:", error);
+        productsContainer.innerHTML = '<p style="text-align:center; grid-column: 1/-1;">No se pudieron cargar los productos en este momento.</p>';
+    }
+}
+
+function renderProducts(items) {
+    productsContainer.innerHTML = '';
+
+    if(!items || items.length === 0) return;
+
+    items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        // Estructura de la tarjeta
+        card.innerHTML = `
+            <img src="${item.image || 'https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'}" alt="${item.name}">
+            <div class="card-content">
+                <h3>${item.name}</h3>
+                <p>${item.description || 'Deliciosa pizza preparada al momento con nuestra receta secreta.'}</p>
+
+                <div class="options-group">
+                    <select class="size">
+                        <option value="0">Tamaño Individual</option>
+                        <option value="40">Tamaño Mediana (+$40)</option>
+                        <option value="80">Tamaño Familiar (+$80)</option>
+                    </select>
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" class="border">
+                        Orilla rellena de queso (+$35)
+                    </label>
+                </div>
+
+                <div class="price-row">
+                    <div class="price">$<span>${parseFloat(item.price).toFixed(2)}</span></div>
+                    <button class="add">Agregar</button>
+                </div>
+            </div>
+        `;
+
+        const sizeSelect = card.querySelector('.size');
+        const borderCheck = card.querySelector('.border');
+        const priceDisplay = card.querySelector('.price span');
+        const addBtn = card.querySelector('.add');
+
+        // Función para calcular precio dinámico
+        function calculateCurrentPrice() {
+            let basePrice = Number(item.price);
+            let sizeExtra = Number(sizeSelect.value);
+            let borderExtra = borderCheck.checked ? 35 : 0;
+            let total = basePrice + sizeExtra + borderExtra;
+            
+            priceDisplay.textContent = total.toFixed(2);
+            return total;
+        }
+
+        // Listeners para actualizar el precio en tiempo real
+        sizeSelect.addEventListener('change', calculateCurrentPrice);
+        borderCheck.addEventListener('change', calculateCurrentPrice);
+
+        // Añadir al carrito
+        addBtn.addEventListener('click', () => {
+            const finalPrice = calculateCurrentPrice();
+            
+            // Efecto visual rápido en el botón
+            addBtn.textContent = '¡Agregado!';
+            addBtn.style.background = 'var(--primary)';
+            setTimeout(() => {
+                addBtn.textContent = 'Agregar';
+                addBtn.style.background = 'var(--text-dark)';
+            }, 1000);
+
+            cart.push({
+                name: item.name,
+                price: finalPrice,
+                details: `${sizeSelect.options[sizeSelect.selectedIndex].text}${borderCheck.checked ? ' + Orilla' : ''}`
+            });
+
+            updateCartUI();
+        });
+
+        productsContainer.appendChild(card);
+    });
+}
+
+function updateCartUI() {
+    cartItemsContainer.innerHTML = '';
+    let total = 0;
+
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p style="text-align: center; color: #999; margin-top: 50px;">El carrito está vacío</p>';
+    } else {
+        cart.forEach((item, index) => {
+            total += item.price;
+            cartItemsContainer.innerHTML += `
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <h4>${item.name}</h4>
+                        <span style="font-size: 12px; color: #666;">${item.details}</span>
+                    </div>
+                    <div class="cart-item-price">
+                        $${item.price.toFixed(2)}
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    // Actualizar contadores y totales
+    totalEl.textContent = `$${total.toFixed(2)} MXN`;
+    
+    // Animación del contador
+    cartCountEl.textContent = cart.length;
+    cartCountEl.parentElement.style.transform = 'scale(1.2)';
+    setTimeout(() => {
+        cartCountEl.parentElement.style.transform = 'scale(1)';
+    }, 200);
+}
+
+// Iniciar aplicación
+loadStore();
+</script>
+
+</body>
+</html>
