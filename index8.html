@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Delivery App | Routicket</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --rappi-orange: #FF441F;
+            --rappi-hover: #E33B1A;
+            --bg-gray: #F2F4F5;
+            --card-border: #E8E8E8;
+            --text-main: #333333;
+            --text-muted: #8F8F8F;
+            --green-success: #00B260;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Nunito', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-gray);
+            color: var(--text-main);
+            padding-bottom: 100px; /* Espacio para el carrito flotante */
+        }
+
+        /* HEADER TIPO APP */
+        header {
+            background: white;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .address-bar {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .address-bar span {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .address-bar strong {
+            font-size: 15px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .address-bar strong::after {
+            content: '▼';
+            font-size: 10px;
+            color: var(--rappi-orange);
+        }
+
+        /* CARRUSEL DE CATEGORÍAS */
+        .categories {
+            background: white;
+            padding: 10px 20px 15px;
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            white-space: nowrap;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .categories::-webkit-scrollbar {
+            display: none; /* Ocultar scrollbar en móviles */
+        }
+
+        .cat-pill {
+            background: var(--bg-gray);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+
+        .cat-pill.active {
+            background: var(--rappi-orange);
+            color: white;
+        }
+
+        /* CONTENEDOR PRINCIPAL */
+        .container {
+            max-width: 800px; /* Diseño centrado en PC, fluido en móvil */
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .store-title {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 10px 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* TARJETAS HORIZONTALES ESTILO DELIVERY */
+        .product-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            gap: 15px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            position: relative;
+        }
+
+        .product-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-info h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .product-info p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Controles de Opciones Integrados */
+        .options {
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .options select {
+            width: 100%;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--card-border);
+            font-size: 13px;
+            background: var(--bg-gray);
+            outline: none;
+        }
+
+        .options label {
+            font-size: 13px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .options input[type="checkbox"] {
+            accent-color: var(--rappi-orange);
+            width: 16px;
+            height: 16px;
+        }
+
+        .product-price {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-top: auto;
+        }
+
+        .product-image-container {
+            width: 110px;
+            height: 110px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .product-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .add-btn {
+            position: absolute;
+            bottom: -10px;
+            right: 50%;
+            transform: translateX(50%);
+            background: white;
+            color: var(--rappi-orange);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 4px 16px;
+            font-size: 14px;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .add-btn:active {
+            transform: translateX(50%) scale(0.95);
+            background: var(--bg-gray);
+        }
+
+        /* CANASTA FLOTANTE BOTTOM BAR */
+        .floating-cart-wrapper {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(150%);
+            width: 90%;
+            max-width: 500px;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100;
+        }
+
+        .floating-cart-wrapper.visible {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .floating-cart {
+            background: var(--rappi-orange);
+            color: white;
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(255, 68, 31, 0.3);
+            cursor: pointer;
+        }
+
+        .cart-qty {
+            background: rgba(0,0,0,0.15);
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .cart-text {
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .cart-total-price {
+            font-weight: 800;
+            font-size: 16px;
+        }
+
+        /* MODAL DE CARRITO (BOTTOM SHEET) */
+        .cart-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+        }
+
+        .cart-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .cart-modal {
+            position: fixed;
+            bottom: -100%;
+            left: 0;
+            width: 100%;
+            background: white;
+            border-radius: 20px 20px 0 0;
+            z-index: 1001;
+            padding: 20px;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1);
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-modal.active {
+            bottom: 0;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .modal-header h2 {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .close-modal {
+            background: var(--bg-gray);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+
+        .modal-body {
+            overflow-y: auto;
+            flex: 1;
+            padding-bottom: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px dashed var(--card-border);
+        }
+
+        .item-details h4 {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .item-details span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .item-price {
+            font-weight: 800;
+            font-size: 15px;
+        }
+
+        .checkout-btn {
+            background: var(--rappi-orange);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="address-bar">
+            <span>Entregando en</span>
+            <strong>Av. Principal, Ciudad ▾</strong>
+        </div>
+    </header>
+
+    <div class="categories">
+        <div class="cat-pill active">🍕 Pizzas</div>
+        <div class="cat-pill">🥤 Bebidas</div>
+        <div class="cat-pill">🍰 Postres</div>
+        <div class="cat-pill">🥗 Entradas</div>
+    </div>
+
+    <div class="container">
+        <h1 class="store-title" id="storeName">Cargando restaurante...</h1>
+        <div class="product-list" id="products">
+            <!-- Productos -->
+        </div>
+    </div>
+
+    <!-- Banner Flotante Inferior -->
+    <div class="floating-cart-wrapper" id="floatingCartWrapper">
+        <div class="floating-cart" onclick="toggleCartModal()">
+            <div class="cart-qty"><span id="cartQty">0</span></div>
+            <div class="cart-text">Ver canasta</div>
+            <div class="cart-total-price" id="cartTotalBtn">$0.00</div>
+        </div>
+    </div>
+
+    <!-- Modal de Canasta (Bottom Sheet) -->
+    <div class="cart-modal-overlay" id="cartOverlay" onclick="toggleCartModal()"></div>
+    <div class="cart-modal" id="cartModal">
+        <div class="modal-header">
+            <h2>Tu Pedido</h2>
+            <button class="close-modal" onclick="toggleCartModal()">✕</button>
+        </div>
+        <div class="modal-body" id="cartItems">
+            <!-- Items del carrito -->
+        </div>
+        <button class="checkout-btn" id="checkoutBtn">Ir a pagar - $0.00</button>
+    </div>
+
+<script>
+const API = 'https://routicket.com/tienda/get_tienda.php?id_tienda=15510';
+
+const productsContainer = document.getElementById('products');
+const floatingCartWrapper = document.getElementById('floatingCartWrapper');
+const cartQtyEl = document.getElementById('cartQty');
+const cartTotalBtn = document.getElementById('cartTotalBtn');
+const cartItemsContainer = document.getElementById('cartItems');
+const checkoutBtn = document.getElementById('checkoutBtn');
+const cartModal = document.getElementById('cartModal');
+const cartOverlay = document.getElementById('cartOverlay');
+
+let cart = [];
+
+function toggleCartModal() {
+    cartModal.classList.toggle('active');
+    cartOverlay.classList.toggle('active');
+}
+
+async function loadStore() {
+    try {
+        const res = await fetch(API);
+        const data = await res.json();
+
+        if(data.data && data.data.titulo) {
+            document.getElementById('storeName').textContent = data.data.titulo;
+        }
+
+        renderProducts(data.data.productos);
+    } catch (error) {
+        console.error("Error:", error);
+        productsContainer.innerHTML = '<p>Error al cargar el menú.</p>';
+    }
+}
+
+function renderProducts(items) {
+    productsContainer.innerHTML = '';
+
+    if(!items || items.length === 0) return;
+
+    items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+
+        card.innerHTML = `
+            <div class="product-info">
+                <h3>${item.name}</h3>
+                <p>${item.description || 'Preparada con los ingredientes más frescos de la zona.'}</p>
+                
+                <div class="options">
+                    <select class="size">
+                        <option value="0">Individual</option>
+                        <option value="40">Mediana (+$40)</option>
+                        <option value="80">Familiar (+$80)</option>
+                    </select>
+                    <label>
+                        <input type="checkbox" class="border">
+                        Orilla de queso (+$35)
+                    </label>
+                </div>
+
+                <div class="product-price">$<span class="price-val">${parseFloat(item.price).toFixed(2)}</span></div>
+            </div>
+            <div class="product-image-container">
+                <img src="${item.image || 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=300&q=80'}" alt="${item.name}">
+                <button class="add-btn">Agregar</button>
+            </div>
+        `;
+
+        const sizeSelect = card.querySelector('.size');
+        const borderCheck = card.querySelector('.border');
+        const priceDisplay = card.querySelector('.price-val');
+        const addBtn = card.querySelector('.add-btn');
+
+        function calcPrice() {
+            let total = Number(item.price) + Number(sizeSelect.value);
+            if(borderCheck.checked) total += 35;
+            priceDisplay.textContent = total.toFixed(2);
+            return total;
+        }
+
+        sizeSelect.addEventListener('change', calcPrice);
+        borderCheck.addEventListener('change', calcPrice);
+
+        addBtn.addEventListener('click', () => {
+            const finalPrice = calcPrice();
+            
+            // Efecto visual en el botón
+            const originalText = addBtn.textContent;
+            addBtn.textContent = '✓';
+            addBtn.style.color = 'var(--green-success)';
+            setTimeout(() => {
+                addBtn.textContent = originalText;
+                addBtn.style.color = 'var(--rappi-orange)';
+            }, 800);
+
+            cart.push({
+                name: item.name,
+                price: finalPrice,
+                details: `${sizeSelect.options[sizeSelect.selectedIndex].text}${borderCheck.checked ? ' (c/ Orilla)' : ''}`
+            });
+
+            updateCart();
+        });
+
+        productsContainer.appendChild(card);
+    });
+}
+
+function updateCart() {
+    let total = 0;
+    cartItemsContainer.innerHTML = '';
+
+    if (cart.length > 0) {
+        floatingCartWrapper.classList.add('visible');
+    } else {
+        floatingCartWrapper.classList.remove('visible');
+    }
+
+    cart.forEach(item => {
+        total += item.price;
+        cartItemsContainer.innerHTML += `
+            <div class="cart-item">
+                <div class="item-details">
+                    <h4>1x ${item.name}</h4>
+                    <span>${item.details}</span>
+                </div>
+                <div class="item-price">$${item.price.toFixed(2)}</div>
+            </div>
+        `;
+    });
+
+    const formatTotal = `$${total.toFixed(2)}`;
+    
+    // Actualizar banner flotante
+    cartQtyEl.textContent = cart.length;
+    cartTotalBtn.textContent = formatTotal;
+    
+    // Actualizar modal
+    checkoutBtn.textContent = `Ir a pagar - ${formatTotal}`;
+}
+
+loadStore();
+</script>
+</body>
+</html>
