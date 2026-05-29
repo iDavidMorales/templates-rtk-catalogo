@@ -1,0 +1,421 @@
+```html
+<!-- GOOGLE FONT -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- FONT AWESOME -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+:root{
+    --rosa-principal:#e9a7bb;
+    --rosa-claro:#fff4f7;
+    --rosa-suave:#f7d9e3;
+    --rosa-intenso:#cf7d98;
+    --texto:#5e4b53;
+    --blanco:#ffffff;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:var(--rosa-claro);
+    color:var(--texto);
+}
+
+/* HERO */
+.hero{
+    min-height:92vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:60px 20px;
+    background:
+    linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.82)),
+    url('https://i.imgur.com/H7DC7iE.jpeg');
+    background-size:cover;
+    background-position:center;
+}
+
+.hero-content{
+    max-width:760px;
+    background:rgba(255,255,255,0.82);
+    padding:45px 35px;
+    border-radius:28px;
+    box-shadow:0 10px 35px rgba(0,0,0,0.08);
+    backdrop-filter:blur(4px);
+}
+
+.logo-img{
+    width:140px;
+    height:140px;
+    object-fit:cover;
+    border-radius:50%;
+    margin-bottom:20px;
+    border:5px solid rgba(255,255,255,0.9);
+}
+
+.hero h1{
+    font-size:3rem;
+    color:var(--rosa-intenso);
+    margin-bottom:15px;
+}
+
+.hero h2{
+    font-size:1.2rem;
+    margin-bottom:18px;
+    font-weight:500;
+}
+
+.hero h2 i{
+    color:var(--rosa-intenso);
+    margin-right:8px;
+}
+
+.hero p{
+    line-height:1.8;
+    font-size:1rem;
+    max-width:620px;
+    margin:auto;
+}
+
+.hero-btn{
+    display:inline-block;
+    margin-top:28px;
+    padding:14px 34px;
+    background:linear-gradient(135deg,var(--rosa-principal),var(--rosa-intenso));
+    color:white;
+    text-decoration:none;
+    border-radius:40px;
+    font-weight:600;
+    box-shadow:0 8px 18px rgba(207,125,152,0.25);
+    transition:.3s;
+}
+
+.hero-btn:hover{
+    transform:translateY(-3px);
+}
+
+/* TITULOS */
+.section-title{
+    text-align:center;
+    padding:70px 20px 30px;
+}
+
+.section-title h2{
+    font-size:2.3rem;
+    color:var(--rosa-intenso);
+    margin-bottom:10px;
+}
+
+.section-title p{
+    color:#7a6870;
+}
+
+/* CATALOGO */
+.products{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:28px;
+    padding:20px 8% 70px;
+}
+
+.product-card{
+    background:white;
+    border-radius:24px;
+    overflow:hidden;
+    box-shadow:0 10px 25px rgba(0,0,0,0.06);
+    transition:.3s;
+}
+
+.product-card:hover{
+    transform:translateY(-5px);
+}
+
+.product-card img{
+    width:100%;
+    height:280px;
+    object-fit:cover;
+}
+
+.product-info{
+    padding:22px;
+}
+
+.product-info h3{
+    color:var(--rosa-intenso);
+    margin-bottom:10px;
+    font-size:1.15rem;
+}
+
+.product-info p{
+    font-size:.95rem;
+    line-height:1.6;
+    margin-bottom:15px;
+}
+
+.price{
+    display:block;
+    font-size:1.2rem;
+    font-weight:700;
+    margin-bottom:18px;
+}
+
+.add-cart{
+    width:100%;
+    border:none;
+    padding:13px;
+    border-radius:14px;
+    background:linear-gradient(135deg,var(--rosa-principal),var(--rosa-intenso));
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+}
+
+/* CARRITO */
+.cart{
+    background:white;
+    margin:20px auto 80px;
+    width:90%;
+    max-width:700px;
+    padding:35px;
+    border-radius:28px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.06);
+}
+
+.cart h2{
+    color:var(--rosa-intenso);
+    margin-bottom:20px;
+    text-align:center;
+}
+
+#cart-items{
+    margin-bottom:20px;
+}
+
+.cart-item{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:12px;
+    padding-bottom:12px;
+    border-bottom:1px solid #f1d9e1;
+}
+
+.total{
+    font-size:1.2rem;
+    font-weight:700;
+    margin-bottom:20px;
+    text-align:right;
+}
+
+.checkout-btn{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:16px;
+    background:#25D366;
+    color:white;
+    font-size:1rem;
+    font-weight:600;
+    cursor:pointer;
+}
+
+@media(max-width:768px){
+
+.hero h1{
+    font-size:2.2rem;
+}
+
+.hero-content{
+    padding:35px 24px;
+}
+
+.logo-img{
+    width:110px;
+    height:110px;
+}
+
+.products{
+    padding:20px;
+}
+
+}
+
+</style>
+
+<!-- HERO -->
+<section class="hero">
+
+    <div class="hero-content">
+
+        <img src="https://i.imgur.com/H7DC7iE.jpeg" alt="Florence Beauty Lab" class="logo-img">
+
+        <h1>FlorenceBeautyLab</h1>
+
+        <h2>
+            <i class="fa-solid fa-star"></i>
+            Especialistas en cabellos latinos
+        </h2>
+
+        <p>
+            Tienda especializada en productos capilares seleccionados cuidadosamente de las mejores marcas de Latinoamérica. Encuentra tratamientos, hidratación, coloración y cuidado profesional pensado especialmente para la belleza y necesidades del cabello latino.
+        </p>
+
+        <a href="#menu" class="hero-btn">
+            Ver catálogo
+        </a>
+
+    </div>
+
+</section>
+
+<!-- TITULO -->
+<div class="section-title" id="menu">
+    <h2>
+        <i class="fa-solid fa-heart"></i>
+        Catálogo Capilar
+    </h2>
+
+    <p>Productos premium desde $500 MXN</p>
+</div>
+
+<!-- PRODUCTOS -->
+<section class="products">
+
+    <div class="product-card">
+        <img src="https://i.imgur.com/qfRZXbz.png" alt="Producto Capilar">
+
+        <div class="product-info">
+            <h3>Tratamiento Profesional Repair</h3>
+            <p>Tratamiento intensivo para restaurar, suavizar y devolver brillo al cabello maltratado.</p>
+            <span class="price">$500 MXN</span>
+            <button class="add-cart" onclick="addToCart('Tratamiento Profesional Repair',500)">
+                Agregar al carrito
+            </button>
+        </div>
+    </div>
+
+    <div class="product-card">
+        <img src="https://i.imgur.com/Oa9fSBp.png" alt="Producto Capilar">
+
+        <div class="product-info">
+            <h3>Kit Hidratación Latina</h3>
+            <p>Ideal para hidratar profundamente y controlar el frizz en cabellos latinos.</p>
+            <span class="price">$650 MXN</span>
+            <button class="add-cart" onclick="addToCart('Kit Hidratación Latina',650)">
+                Agregar al carrito
+            </button>
+        </div>
+    </div>
+
+    <div class="product-card">
+        <img src="https://i.imgur.com/i0ADhTb.png" alt="Producto Capilar">
+
+        <div class="product-info">
+            <h3>Mascarilla Luxury Shine</h3>
+            <p>Nutrición y brillo profesional con ingredientes premium para cabello suave y sedoso.</p>
+            <span class="price">$780 MXN</span>
+            <button class="add-cart" onclick="addToCart('Mascarilla Luxury Shine',780)">
+                Agregar al carrito
+            </button>
+        </div>
+    </div>
+
+    <div class="product-card">
+        <img src="https://i.imgur.com/3Gja4n9.png" alt="Producto Capilar">
+
+        <div class="product-info">
+            <h3>Botox Capilar Premium</h3>
+            <p>Fórmula avanzada para revitalizar el cabello y reducir el daño químico.</p>
+            <span class="price">$950 MXN</span>
+            <button class="add-cart" onclick="addToCart('Botox Capilar Premium',950)">
+                Agregar al carrito
+            </button>
+        </div>
+    </div>
+
+</section>
+
+<!-- CARRITO -->
+<section class="cart">
+
+    <h2>
+        <i class="fa-solid fa-cart-shopping"></i>
+        Carrito de compras
+    </h2>
+
+    <div id="cart-items"></div>
+
+    <div class="total">
+        Total: <span id="cart-total">$0</span> MXN
+    </div>
+
+    <button class="checkout-btn" onclick="checkoutWhatsApp()">
+        Finalizar pedido por WhatsApp
+    </button>
+
+</section>
+
+<script>
+
+let cart = [];
+
+function addToCart(name, price){
+
+    cart.push({name, price});
+    renderCart();
+}
+
+function renderCart(){
+
+    const cartItems = document.getElementById('cart-items');
+    const cartTotal = document.getElementById('cart-total');
+
+    cartItems.innerHTML = '';
+
+    let total = 0;
+
+    cart.forEach(item => {
+
+        total += item.price;
+
+        cartItems.innerHTML += `
+            <div class="cart-item">
+                <span>${item.name}</span>
+                <span>$${item.price} MXN</span>
+            </div>
+        `;
+    });
+
+    cartTotal.textContent = `$${total}`;
+}
+
+function checkoutWhatsApp(){
+
+    if(cart.length === 0){
+        alert('Tu carrito está vacío');
+        return;
+    }
+
+    let message = 'Hola FlorenceBeautyLab ✨ Quiero realizar el siguiente pedido:%0A%0A';
+
+    let total = 0;
+
+    cart.forEach(item => {
+        message += `• ${item.name} - $${item.price} MXN%0A`;
+        total += item.price;
+    });
+
+    message += `%0ATotal: $${total} MXN`;
+
+    window.open(`https://wa.me/529842665680?text=${message}`, '_blank');
+}
+
+</script>
+```
