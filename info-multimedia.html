@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Contenido Multimedia en HTML5</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            background-color: #f0f4f8;
+        }
+        h1 {
+            color: #0f172a;
+            border-bottom: 3px solid #ec4899;
+            padding-bottom: 10px;
+            text-align: center;
+            font-size: 2.5rem;
+        }
+        h2 {
+            color: #db2777;
+            margin-top: 40px;
+            border-left: 5px solid #db2777;
+            padding-left: 10px;
+            font-size: 1.8rem;
+        }
+        h3 {
+            color: #475569;
+            font-size: 1.3rem;
+            margin-top: 20px;
+        }
+        p {
+            margin-bottom: 1.5em;
+        }
+        .section {
+            background: #ffffff;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .output-box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            margin-top: 15px;
+            border-radius: 6px;
+        }
+        .output-title {
+            font-weight: bold;
+            color: #1e40af;
+            margin-top: 0;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+        }
+        code {
+            font-family: 'Fira Code', Consolas, monospace;
+        }
+        .media-placeholder {
+            background: #e2e8f0;
+            border: 2px dashed #cbd5e1;
+            padding: 30px;
+            text-align: center;
+            color: #64748b;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        .badge {
+            background-color: #fce7f3;
+            color: #9d174d;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Guía de Contenido Multimedia en HTML5</h1>
+    <p style="text-align: center; color: #64748b; font-size: 1.1rem;">Aprende a integrar imágenes semánticas, audio, video y elementos externos embebidos de manera profesional.</p>
+
+    <div class="section">
+        <h2>1. Imágenes Semánticas (&lt;figure&gt; y &lt;figcaption&gt;)</h2>
+        <p>En HTML5, cuando una imagen está acompañada de un texto explicativo o ilustrativo, se agrupa dentro de la etiqueta <code>&lt;figure&gt;</code> para darle un contexto semántico que los buscadores puedan indexar correctamente.</p>
+        
+        <h3>Código Fuente</h3>
+        <pre><code class="language-html">&lt;figure&gt;
+    &lt;img src="paisaje.jpg" alt="Montañas nevadas al amanecer" width="100%"&gt;
+    &lt;figcaption&gt;Fig.1 - Vista panorámica de los Alpes suizos en invierno.&lt;/figcaption&gt;
+&lt;/figure&gt;</code></pre>
+
+        <div class="output-box">
+            <div class="output-title">Muestra de Texto Explicativa (Resultado Esperado)</div>
+            <div style="background: white; padding: 10px; border: 1px solid #e2e8f0; border-radius: 4px;">
+                <div class="media-placeholder">[ Espacio de renderizado de la imagen: paisaje.jpg ]</div>
+                <p style="font-size: 0.9rem; color: #475569; margin: 5px 0 0 0; text-align: center;">
+                    Fig.1 - Vista panorámica de los Alpes suizos en invierno. <span class="badge">&lt;figcaption&gt;</span>
+                </p>
+            </div>
+            <p style="color: #64748b; font-size: 0.95rem; margin-top: 10px;">
+                <strong>Beneficio:</strong> Vincula de forma directa el texto descriptivo con el archivo gráfico, mejorando la accesibilidad y el SEO de la página en comparación a usar un simple párrafo suelto debajo de la imagen.
+            </p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>2. Reproductor de Audio Nativo (&lt;audio&gt;)</h2>
+        <p>Permite reproducir música o podcasts sin necesidad de plugins externos (como el antiguo Flash). Soporta múltiples formatos y utiliza la etiqueta interna <code>&lt;source&gt;</code> como alternativa en caso de incompatibilidad de formatos.</p>
+        
+        <h3>Código Fuente</h3>
+        <pre><code class="language-html">&lt;audio controls&gt;
+    &lt;source src="podcast.mp3" type="audio/mpeg"&gt;
+    &lt;source src="podcast.ogg" type="audio/ogg"&gt;
+    Tu navegador no soporta la reproducción de audio nativo.
+&lt;/audio&gt;</code></pre>
+
+        <div class="output-box">
+            <div class="output-title">Muestra de Texto Explicativa (Resultado Esperado)</div>
+            <div style="margin: 15px 0;">
+                <div style="background: #e2e8f0; display: inline-flex; align-items: center; padding: 10px 20px; border-radius: 30px; gap: 15px; width: 100%; max-width: 400px;">
+                    <span style="font-size: 1.2rem; cursor: pointer;">▶</span>
+                    <div style="height: 4px; background: #cbd5e1; flex-grow: 1; border-radius: 2px; position: relative;">
+                        <div style="width: 30%; height: 100%; background: #2563eb; border-radius: 2px;"></div>
+                    </div>
+                    <span style="font-size: 0.85rem; color: #475569;">01:24 / 05:00</span>
+                    <span style="font-size: 1.2rem;">🔊</span>
+                </div>
+            </div>
+            <ul>
+                <li><strong><code>controls</code>:</strong> Atributo clave. Si no se incluye, el reproductor será completamente invisible para el usuario.</li>
+                <li><strong>Texto de respaldo:</strong> La frase <em>"Tu navegador no soporta..."</em> solo se visualizará si el usuario utiliza un navegador extremadamente antiguo que no entienda la etiqueta.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>3. Reproductor de Video Nativo (&lt;video&gt;)</h2>
+        <p>Similar al elemento de audio, pero añade capacidades visuales. Permite controlar dimensiones, imágenes de portada (posters) y comportamientos de reproducción.</p>
+        
+        <h3>Código Fuente</h3>
+        <pre><code class="language-html">&lt;video src="tutorial.mp4" controls poster="miniatura.jpg" width="480"&gt;
+    Su navegador no puede reproducir este video.
+&lt;/video&gt;</code></pre>
+
+        <div class="output-box">
+            <div class="output-title">Muestra de Texto Explicativa (Resultado Esperado)</div>
+            <div style="background: #1e293b; width: 100%; max-width: 480px; height: 270px; border-radius: 6px; position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 15px; box-sizing: border-box; color: white;">
+                <div style="text-align: center; margin-top: auto; color: #94a3b8; font-style: italic;">
+                    [ Aquí se muestra el archivo miniatura.jpg como portada (Poster) ]
+                </div>
+                <div style="font-size: 3rem; text-align: center; color: white; opacity: 0.8; cursor: pointer; margin-bottom: auto; margin-top: 15px;">▶</div>
+                
+                <div style="background: rgba(0,0,0,0.6); padding: 8px 15px; border-radius: 4px; display: flex; gap: 15px; align-items: center; font-size: 0.9rem;">
+                    <span>⏸</span>
+                    <div style="height: 4px; background: #475569; flex-grow: 1; border-radius: 2px;">
+                        <div style="width: 15%; height: 100%; background: #ec4899;"></div>
+                    </div>
+                    <span>00:45 / 12:30</span>
+                    <span>HD ⚙ 🔲</span>
+                </div>
+            </div>
+            <p style="color: #64748b; font-size: 0.95rem; margin-top: 15px;">
+                <strong>Atributos Adicionales Comunes:</strong> <br>
+                • <code>autoplay</code>: El video inicia solo (los navegadores modernos exigen que esté silenciado para permitirlo).<br>
+                • <code>loop</code>: Hace que el video se reinicie infinitamente al terminar.<br>
+                • <code>muted</code>: Desactiva el sonido por defecto.
+            </p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>4. Contenido Embebido Externo (&lt;iframe&gt;)</h2>
+        <p>Un iFrame (Inline Frame) funciona como una "ventana" que incrusta un documento web completamente diferente o servicios de terceros (como mapas de Google Maps o videos de YouTube) dentro de tu propia página.</p>
+        
+        <h3>Código Fuente</h3>
+        <pre><code class="language-html">&lt;iframe src="https://www.wikipedia.org" width="100%" height="300" title="Enciclopedia Wikipedia"&gt;&lt;/iframe&gt;</code></pre>
+
+        <div class="output-box">
+            <div class="output-title">Muestra de Texto Explicativa (Resultado Esperado)</div>
+            <div style="border: 2px solid #cbd5e1; border-radius: 6px; overflow: hidden;">
+                <div style="background: #e2e8f0; padding: 6px 12px; font-size: 0.85rem; color: #475569; border-bottom: 1px solid #cbd5e1;">
+                    🔒 Ventana incrustada: https://www.wikipedia.org
+                </div>
+                <div style="height: 200px; background: white; padding: 20px; box-sizing: border-box;">
+                    <h3 style="margin-top: 0;">Wikipedia</h3>
+                    <p style="font-size: 0.9rem; color: #64748b;">[ Todo el sitio web de Wikipedia se cargaría y operaría de manera interactiva exactamente en este espacio interior sin salirse de tu diseño corporativo ]</p>
+                </div>
+            </div>
+            <p style="color: #64748b; font-size: 0.95rem; margin-top: 12px;">
+                <strong>Nota Importante de Accesibilidad:</strong> El atributo <code>title="..."</code> es sumamente importante en los iFrames. Informa a los lectores de pantalla qué contenido se está integrando desde fuera del dominio principal.
+            </p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>
