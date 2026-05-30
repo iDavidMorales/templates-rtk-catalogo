@@ -31,3 +31,7 @@ Clonar el repositorio:
 Bash
 git clone https://github.com/tu-usuario/templates-rtk-catalogo.git
 cd templates-rtk-catalogo
+
+Recomendaciones
+usar opencode
+y usar gemini ia studio https://aistudio.google.com/ 
